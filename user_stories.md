@@ -2,7 +2,7 @@
 
 ## Administrator user stories
 
-**Administrator access:**
+### **Administrator access:**
 _As a administrator, I want to login, so that i can access the admin dashboard and manage users and settings securely._
 
 **Acceptance Criteria:**
@@ -13,7 +13,7 @@ _As a administrator, I want to login, so that i can access the admin dashboard a
 **Priority:** High
 **Story Points:** 2
 
-**Administrator logout:**
+### **Administrator logout:**
 _As an administrator, I want to logout of the platform, so that my session ends and my credentials cannot be misused.
 
 **Acceptance Criteria:**
@@ -28,7 +28,7 @@ _As an administrator, I want to logout of the platform, so that my session ends 
 **Notes:**
 - Logout should work even if the session is expired.
 
-**Add new doctors:**
+### **Add new doctors:**
 _As an administrator, I want to add new doctors to the portal, so that they can access the platform and work._
 
 **Acceptance Criteria:**
@@ -42,7 +42,7 @@ _As an administrator, I want to add new doctors to the portal, so that they can 
 **Story Points:** 2
 **Notes:**
 
-**Delete doctor profile:**
+### **Delete doctor profile:**
 _As an administrator, I want to delete a doctor profile from the portal, so that the doctor no longer has access to the platform._
 
 **Acceptance Criteria:**
@@ -55,7 +55,7 @@ _As an administrator, I want to delete a doctor profile from the portal, so that
 **Story Points:** 2
 **Notes:**
 
-**Run stored procedures:**
+### **Run stored procedures:**
 _As an administrator, I want to run a store procedure in the MySQL CLI to get the number of appointments per month and track usage statistics, so that I can monitor system performance and user engagement._
 
 **Acceptance Criteria:**
@@ -70,7 +70,7 @@ _As an administrator, I want to run a store procedure in the MySQL CLI to get th
 
 ## Patient user stories
 
-**List doctors:**
+### **List doctors:**
 _As a patient, I want to access a list with all the doctors on the platform, so that I can choose the best option for my case._
 
 **Acceptance Criteria:**
@@ -83,7 +83,7 @@ _As a patient, I want to access a list with all the doctors on the platform, so 
 **Story Points:** 1
 **Notes:**
 
-**Patient Sinup:**
+### **Patient Sinup:**
 _As a patient, I want to Sign up, so that I can create an account and later book appointments.
 
 **Acceptance Criteria:**
@@ -96,7 +96,7 @@ _As a patient, I want to Sign up, so that I can create an account and later book
 **Story Points:** 2
 **Notes:**
 
-**Patient login:**
+### **Patient login:**
 _As a patient, I want to login, so that I can manage my bookings._
 
 **Acceptance Criteria:**
@@ -110,7 +110,7 @@ _As a patient, I want to login, so that I can manage my bookings._
 **Notes:**
     - HTTPs should be enforced.
 
-**Patient logout:**
+### **Patient logout:**
 _As an Patient, I want to logout of the platform, so that my session ends and my credentials cannot be misused.
 
 **Acceptance Criteria:**
@@ -125,7 +125,7 @@ _As an Patient, I want to logout of the platform, so that my session ends and my
 **Notes:**
 - Logout should work even if the session is expired.
 
-**Book appointment:**
+### **Book appointment:**
 _As a patient, I want to book appointments, so that I can consult with a doctor._
 
 **Acceptance Criteria:**
@@ -141,7 +141,7 @@ _As a patient, I want to book appointments, so that I can consult with a doctor.
 
 ## Doctor user stories
 
-**Doctor login:**
+### **Doctor login:**
 _As a Doctor, I want to login, so that I can manage my appointments._
 
 **Acceptance Criteria:**
@@ -155,7 +155,7 @@ _As a Doctor, I want to login, so that I can manage my appointments._
 **Notes:**
     - HTTPs should be enforced.
 
-**Doctor logout:**
+### **Doctor logout:**
 _As an Doctor, I want to logout of the platform, so that my session ends and my credentials cannot be misused.
 
 **Acceptance Criteria:**
@@ -170,7 +170,7 @@ _As an Doctor, I want to logout of the platform, so that my session ends and my 
 **Notes:**
 - Logout should work even if the session is expired.
 
-**View appointments calendar:**
+### **View appointments calendar:**
 _As a doctor, I want to view my appointments calendar, so that I can stay organized and provide the best service for my patients._
 
 **Acceptance Criteria:**
@@ -183,7 +183,7 @@ _As a doctor, I want to view my appointments calendar, so that I can stay organi
 **Story Points:** 3
 **Notes:**
 
-**Mark unavailability:**
+### **Mark unavailability:**
 _As a doctor, I want to mark the dates/times when I cannot consult, so that patient know when to find me._
 
 **Acceptance Criteria:**
@@ -196,7 +196,7 @@ _As a doctor, I want to mark the dates/times when I cannot consult, so that pati
 **Story Points:** 3
 **Notes:**
 
-**Update profile:**
+### **Update profile:**
 _As a Doctor, I want to update my profile, so that the patients always have the latest information about me._
 
 **Acceptance Criteria:**
