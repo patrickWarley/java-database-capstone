@@ -32,24 +32,24 @@ public class Appointment {
 
   @NotNull
   @Future(message = "Appointment time must be in the future!")
-  private LocalDateTime appointmenTime;
+  private LocalDateTime appointmentTime;
 
   @NotNull
   private int status;
 
   @Transient
   private LocalDateTime getEndTime() {
-
+	return LocalDate.now().atStartOfDay();
   }
 
   @Transient
   private LocalDate getAppointmentDate() {
-
+	return LocalDate.now();
   }
 
   @Transient
   private LocalTime getAppointmentTimeOnly() {
-
+	return LocalTime.now();
   }
 
   public long getId() {
@@ -77,11 +77,11 @@ public class Appointment {
   }
 
   public LocalDateTime getAppointmenTime() {
-    return appointmenTime;
+    return appointmentTime;
   }
 
-  public void setAppointmenTime(LocalDateTime appointmenTime) {
-    this.appointmenTime = appointmenTime;
+  public void setAppointmenTime(LocalDateTime appointmentTime) {
+    this.appointmentTime = appointmentTime;
   }
 
   public int getStatus() {
