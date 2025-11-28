@@ -1,3 +1,80 @@
+import { showBookingOverlay } from "../loggedPatient";
+import { deleteDoctor } from "../services/doctorServices";
+import { getPatientData } from "../services/patientServices";
+
+
+export function createDoctorCard(doctor) {
+  let doctorCardDiv = document.createElement('div');
+  doctorCardDiv.classList.add("doctor-card");
+
+  let doctorCardInfo = document.createElement('div');
+  doctorCardInfo.classList.add("doctor-info");
+
+  let cardContent = `
+    <h3>${doctor.name}</h3>
+    <p>${doctor.specialization}</p>
+    <p>${doctor.email}</p>
+    <ul class="appointments-list">
+      ${doctor.availableTimes.reduce((curr, next) => curr += `<li>${appointment}</li>`).join(''), ""}
+    </ul>
+  `;
+
+  doctorCardInfo.innerHTML = cardContent;
+
+  let role = localStorage.getItem("role");
+  let cardActionContainer = document.createElement('div');
+
+  if (role == "admin") {
+    let deleteButton = document.createElement('button');
+    deleteButton.addEventListener('click', () => {
+      let token = localStorage.getItem('token');
+
+      let response = deleteDoctor(doctor.id, token);
+
+      if (response.success) {
+        alert('Doctor removed successfuly');
+        document.removeChild(doctorCardDiv);
+      } else alert("Something went wrong. Please try again later!");
+
+    });
+
+    cardActionContainer.appendChild(deleteButton);
+
+  } else if (role == "loggedPatient") {
+    let bookNowButton = document.createElement("button");
+    bookNowButton.addEventListener("click",async () =>{
+      let token = localStorage.getItem("token");
+
+      if(!token){
+        alert("Session expired or invalid login. Please log in again.");
+        window.location.href = "/";
+      }
+
+      let response = await getPatientData(token);
+
+      if(!response) alert("An error ocurred while fetching patient data. Please try again!");
+      
+      showBookingOverlay(bookNowButton, doctor, response)
+    });
+
+  } else if (role == "patient") {
+    let bookNowButton = document.createElement("button");
+    bookNowButton.addEventListener("click", () => {
+      alert("You need to log in to book an appointment!");
+    });
+
+    cardActionContainer.appendChild(bookNowButton);
+
+  } else {
+    console.log("I don't know what you trying to do");
+  }
+
+  doctorCardDiv.appendChild(doctorCardInfo);
+  doctorCardDiv.appendChild(cardActionContainer); 
+
+  return doctorCardDiv;
+}
+
 /*
 Import the overlay function for booking appointments from loggedPatient.js
 
