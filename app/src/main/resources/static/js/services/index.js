@@ -1,7 +1,82 @@
+
+import { openModal } from "../components/modals";
+import { API_BASE_URL } from "../config/config";
+
+const DOCTOR_API = API_BASE_URL + "/doctor/login";
+const ADMIN_API = API_BASE_URL + "/admin";
+
+window.addEventListener("load", () =>{
+  let adminLogin = document.getElementById("adminLogin");
+  let doctorLogin = document.getElementById("doctorLogin");
+
+  if(adminLogin){
+    adminLogin.addEventListener('click', () =>{
+      openModal('adminLogin');
+    });
+  }
+
+  if(doctorLogin){
+    doctorLogin.addEventListener('click', () =>{
+      openModal('doctorLogin');
+    });
+  }
+
+
+});
+
+async function adminLoginHandler(){
+  let username = document.getElementById('username');
+  let password = document.getElementById('password');
+
+  let admin = {username, password}
+  try{
+      let response = await fetch(ADMIN_API, {
+        method:"POST",
+        headers:{"Content-type":"application/json"},
+        body:JSON.stringify(admin)
+        });
+
+      response = response.JSON();
+
+      //What the backend returns?
+      if(response.error) return alert("Error when trying to login. Please review your information and try again!");
+
+      localStorage.setItem("token", response.token);
+
+      selectRole('admin');
+
+  }catch(error){
+    alert("An error ocurred! Please try again later!");
+  }
+}
+
+async function doctorLoginHandler(){
+  let email = document.getElementById('username');
+  let password = document.getElementById('password');
+
+  let doctor = {email, password}
+  try{
+      let response = await fetch(DOCTOR_API, {
+        method:"POST",
+        headers:{"Content-type":"application/json"},
+        body:JSON.stringify(doctor)
+        });
+
+      response = response.JSON();
+
+      //What the backend returns?
+      if(response.error) return alert("Error when trying to login. Please review your information and try again!");
+
+      localStorage.setItem("token", response.token);
+
+      selectRole('doctor');
+
+  }catch(error){
+    alert("An error ocurred! Please try again later!");
+  }
+}
+
 /*
-  Import the openModal function to handle showing login popups/modals
-  Import the base API URL from the config file
-  Define constants for the admin and doctor login API endpoints using the base URL
 
   Use the window.onload event to ensure DOM elements are available after page load
   Inside this function:
@@ -10,7 +85,6 @@
         - Add a click event listener that calls openModal('adminLogin') to show the admin login modal
     - If the doctor login button exists:
         - Add a click event listener that calls openModal('doctorLogin') to show the doctor login modal
-
 
   Define a function named adminLoginHandler on the global window object
   This function will be triggered when the admin submits their login credentials

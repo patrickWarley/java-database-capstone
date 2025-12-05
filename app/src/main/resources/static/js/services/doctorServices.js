@@ -1,3 +1,76 @@
+
+import { API_BASE_URL } from "../config/config";
+
+const DOCTOR_API = API_BASE_URL + "/doctor";
+const DEFAULT_ERROR_MESSAGE = "An error ocurred. Please try again later!";
+
+export async function getDoctors() {
+  try {
+    let response = await fetch(DOCTOR_API, { method: "GET", headers: { "Content-type": "application/json" } });
+    let data = await response.json();
+
+    if (response.ok) return data.doctors;
+
+    console.log("An error ocurred. Please review your information and try again!");
+    return [];
+  } catch (error) {
+    console.log(DEFAULT_ERROR_MESSAGE);
+    return [];
+  }
+}
+
+export async function deleteDoctor(id, token) {
+  try {
+
+    let response = await fetch(DOCTOR_API + `/${id}/${token}`, {
+      method: "DELETE",
+    });
+
+    let data = await response.json();
+
+    if (response.ok) return {success:true, message:"Success!! the doctor was deleted!"};
+
+    console.log("An error ocurred when trying to delete the doctor. Try again!");
+  } catch (error) {
+    console.log(DEFAULT_ERROR_MESSAGE, error);
+  }
+}
+
+export async function saveDoctor(doctor, token) {
+  try {
+    let response = await fetch(DOCTOR_API+`${token}`, {
+      method:"POST",
+      headers:{
+        "Content-type":"application/json",
+      },
+      body:JSON.stringify(doctor)
+    });
+
+    let data = await response.json();
+
+    if(response.ok) return {success:true, message:"Doctor saved with success!"};
+    
+    return {success:false, message:DEFAULT_ERROR_MESSAGE} ;
+
+  } catch (error) {
+    console.log(DEFAULT_ERROR_MESSAGE, error);
+  }
+}
+export async function filterDoctors(name, time, specialty) {
+  try {
+   let response = await fetch(`${DOCTOR_API}?name=${name}&time=${time}&specialty=${specialty}`);
+
+   let data = response.json();
+
+   if(response.ok) return data;
+    console.log(DEFAULT_ERROR_MESSAGE);
+    return {doctors:[]};
+  } catch (error) {
+    console.log(DEFAULT_ERROR_MESSAGE, error);
+    return {doctors:[]};
+  }
+}
+
 /*
   Import the base API URL from the config file
   Define a constant DOCTOR_API to hold the full endpoint for doctor-related actions
