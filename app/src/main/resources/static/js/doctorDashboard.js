@@ -1,3 +1,76 @@
+
+import { getAllAppointments } from "./services/appointmentRecordService";
+import { createPatientRow } from "./components/patientRows";
+
+let patientName = null;
+const selectedDate = new Date();
+const token = localStorage.getItem('token');
+let datePicker, todayButton, searchBar, tableBody;
+
+searchBar.addEventListener('change', (evt) => {
+  let value = evt.target.value.trim();
+  patientName = value == ""?null:value;
+  loadAppointments();
+});
+
+
+todayButton.addEventListener('click',() => {
+  selectedDate = new Date();
+
+  datePicker.value = `${selectedDate.getFullYear}/${selectedDate.getMonth()}/${selectedDate.getDay()}`;
+
+  loadAppointments();
+});
+
+datePicker.addEventListener('change', (evt)=>{
+  selectedDate = evt.target.value;
+  loadAppointments();
+});
+
+async function loadAppointments(){
+/**
+ * Function: loadAppointments
+  Purpose: Fetch and display appointments based on selected date and optional patient name
+
+  Step 1: Call getAllAppointments with selectedDate, patientName, and token
+  Step 2: Clear the table body content before rendering new rows
+
+  Step 3: If no appointments are returned:
+    - Display a message row: "No Appointments found for today."
+
+  Step 4: If appointments exist:
+    - Loop through each appointment and construct a 'patient' object with id, name, phone, and email
+    - Call createPatientRow to generate a table row for the appointment
+    - Append each row to the table body
+
+  Step 5: Catch and handle any errors during fetch:
+    - Show a message row: "Error loading appointments. Try again later."
+ * 
+ */
+  try{
+    let appointments = await getAllAppointments(selectedDate, patientName, token);
+    if(!appointments) return tableBody.appendChild(document.createElement('tr').innerText="No Appointments found for today.");
+    
+    appointments.forEach(appointment => {
+        let patient = appointment.patient;
+        tableBody.innerHTML = '';
+        tableBody.appendChild(createPatientRow(patient));
+    });
+
+  }catch(error){
+    alert("Error loading appointments!. Try again later.");
+  }
+}
+
+window.addEventListener('DOMContentLoaded', ()=>{
+   datePicker = document.getElementById("datePicker");
+   todayButton = document.getElementById('todayButton');
+   searchBar= document.getElementById('searchBar');
+   tableBody = document.getElementById('patientTableBody');
+  
+   loadAppointments();
+});
+
 /*
   Import getAllAppointments to fetch appointments from the backend
   Import createPatientRow to generate a table row for each patient appointment
