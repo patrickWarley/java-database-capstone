@@ -39,17 +39,17 @@ public class Appointment {
 
   @Transient
   private LocalDateTime getEndTime() {
-	return LocalDate.now().atStartOfDay();
+	  return this.appointmentTime.plusHours(1);
   }
 
   @Transient
   private LocalDate getAppointmentDate() {
-	return LocalDate.now();
+	return this.appointmentTime.toLocalDate();
   }
 
   @Transient
   private LocalTime getAppointmentTimeOnly() {
-	return LocalTime.now();
+	return this.appointmentTime.toLocalTime();
   }
 
   public long getId() {
@@ -76,11 +76,11 @@ public class Appointment {
     this.patient = patient;
   }
 
-  public LocalDateTime getAppointmenTime() {
+  public LocalDateTime getAppointmentTime() {
     return appointmentTime;
   }
 
-  public void setAppointmenTime(LocalDateTime appointmentTime) {
+  public void setAppointmentTime(LocalDateTime appointmentTime) {
     this.appointmentTime = appointmentTime;
   }
 

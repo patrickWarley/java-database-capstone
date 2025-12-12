@@ -5,8 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.project.back_end.services.Service;
-
+import com.project.back_end.services.BaseService;
 
 @Controller
 public class DashboardController {
@@ -15,8 +14,12 @@ public class DashboardController {
 //    - Annotate the class with `@Controller` to indicate that it serves as an MVC controller returning view names (not JSON).
 //    - This class handles routing to admin and doctor dashboard pages based on token validation.
 
+private final BaseService service;
+
 @Autowired
-private  Service service;
+public DashboardController(BaseService service){
+    this.service = service;
+}
 
 // 3. Define the `adminDashboard` Method:
 //    - Handles HTTP GET requests to `/adminDashboard/{token}`.
