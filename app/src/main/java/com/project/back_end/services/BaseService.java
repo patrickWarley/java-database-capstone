@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.project.back_end.DTO.LoginDTO;
 import com.project.back_end.models.Admin;
 import com.project.back_end.models.Appointment;
 import com.project.back_end.models.Doctor;
@@ -104,23 +105,23 @@ public class BaseService {
     }
   }
 
-  public boolean validatePatient(Patient patient) {
+  public int validatePatient(Patient patient) {
     try {
       Patient dbPatient = patientRepository.findByEmailOrPhone(patient.getEmail(), patient.getPhone());
 
-      return dbPatient != null ? false : true;
+      return dbPatient != null ? -1 : 1;
     } catch (Exception e) {
       System.out.println("An error ocurred when trying to validate the patient" + e.getMessage());
-      return false;
+      return 0;
     }
   }
 
-  public ResponseEntity<Map<String, String>> validatePatientLogin(Patient patient) {
+  public ResponseEntity<Map<String, String>> validatePatientLogin(LoginDTO patient) {
     try {
-      Patient dbPatient = patientRepository.findByEmail(patient.getEmail());
+      Patient dbPatient = patientRepository.findByEmail(patient.getIdentifier());
 
       if (dbPatient != null && dbPatient.getPassword().equals(patient.getPassword())) {
-        return ResponseEntity.ok().body(Map.of("token", tokenService.generateToken(patient.getEmail(), "patient")));
+        return ResponseEntity.ok().body(Map.of("token", tokenService.generateToken(patient.getIdentifier(), "patient")));
       }
 
       return ResponseEntity.status(401).body(Map.of("message", "Invalid credentials!"));

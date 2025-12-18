@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.project.back_end.DTO.Login;
+import com.project.back_end.DTO.LoginDTO;
 import com.project.back_end.models.Appointment;
 import com.project.back_end.models.Doctor;
 import com.project.back_end.repo.AppointmentRepository;
@@ -131,7 +131,7 @@ public class DoctorService {
     }
   }
 
-  public ResponseEntity<Map<String, Object>> validateDoctor(Login login) {
+  public ResponseEntity<Map<String, Object>> validateDoctor(LoginDTO login) {
     try {
       Doctor doctor = doctorRepository.findByEmail(login.getIdentifier());
       Map<String, Object> invalid = Map.of("error", true, "token", null, "message", "Invalid credentials!");

@@ -105,7 +105,7 @@ public class AppointmentService {
         return ResponseEntity.badRequest().body(Map.of("error", "true", "message", "Error validating the patient!"));
     }
 
-    public Map<String, Object> getAppointments(String pName,LocalDate date, String token){
+    public Map<String, List<Appointment>>getAppointments(String pName,LocalDate date, String token){
         if(!tokenService.validateToken("doctor",token)) Map.of("appointments",null);
 
         String email = tokenService.extractEmail(token);
@@ -113,7 +113,7 @@ public class AppointmentService {
         Doctor doc = doctorRepository.findByEmail(email);
         List<Appointment> result=null;
 
-        if (pName == null || pName =="") {  
+        if (pName == null || pName .equals("")) {  
             result = appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(doc.getId(), date.atStartOfDay(), date.atTime(23, 59));
         }else{
             result = appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetween(doc.getId(), pName,date.atStartOfDay(), date.atTime(23, 59));

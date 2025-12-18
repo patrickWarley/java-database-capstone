@@ -1,6 +1,6 @@
 package com.project.back_end.DTO;
 
-public class Login {
+public class LoginDTO {
 
     private String identifier;
     private String password;
