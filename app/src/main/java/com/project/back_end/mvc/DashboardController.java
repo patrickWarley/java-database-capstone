@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.project.back_end.services.BaseService;
+import com.project.back_end.services.TokenService;
 
 @Controller
 public class DashboardController {
@@ -14,10 +15,10 @@ public class DashboardController {
 //    - Annotate the class with `@Controller` to indicate that it serves as an MVC controller returning view names (not JSON).
 //    - This class handles routing to admin and doctor dashboard pages based on token validation.
 
-private final BaseService service;
+private final TokenService service;
 
 @Autowired
-public DashboardController(BaseService service){
+public DashboardController(TokenService service){
     this.service = service;
 }
 
@@ -48,6 +49,7 @@ public String adminDashboard(@PathVariable String token) {
 @GetMapping("/doctorDashboard/{token}")
 public String doctorDashboard(@PathVariable String token) {
     
+
     if(service.validateToken(token, "doctor")){
         return "admin/doctorDashboard";
     }

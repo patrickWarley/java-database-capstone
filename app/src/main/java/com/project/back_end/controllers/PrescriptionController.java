@@ -1,33 +1,58 @@
 package com.project.back_end.controllers;
 
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.project.back_end.models.Prescription;
+import com.project.back_end.services.AppointmentService;
+import com.project.back_end.services.BaseService;
+import com.project.back_end.services.PrescriptionService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
+
+@Controller
+@RequestMapping("${api.path}prescription")
 public class PrescriptionController {
     
-// 1. Set Up the Controller Class:
-//    - Annotate the class with `@RestController` to define it as a REST API controller.
-//    - Use `@RequestMapping("${api.path}prescription")` to set the base path for all prescription-related endpoints.
-//    - This controller manages creating and retrieving prescriptions tied to appointments.
+    private final PrescriptionService prescriptionService;
+    private final BaseService service;
+    private final AppointmentService appointmentService;
 
+    @Autowired
+    public PrescriptionController(PrescriptionService prescriptionService, BaseService service,
+            AppointmentService appointmentService) {
+        this.prescriptionService = prescriptionService;
+        this.service = service;
+        this.appointmentService = appointmentService;
+    }
 
-// 2. Autowire Dependencies:
-//    - Inject `PrescriptionService` to handle logic related to saving and fetching prescriptions.
-//    - Inject the shared `Service` class for token validation and role-based access control.
-//    - Inject `AppointmentService` to update appointment status after a prescription is issued.
+   @PostMapping("/")
+   public ResponseEntity<Map<String, String>> savePrescription(@RequestBody Prescription aPrescription, @RequestHeader("Authorization") String token) {
+        ResponseEntity<Map<String, String>> testToken = service.validateToken(token, "doctor");
 
+        if(testToken.getStatusCode().value() != 200)
+            return testToken;
 
-// 3. Define the `savePrescription` Method:
-//    - Handles HTTP POST requests to save a new prescription for a given appointment.
-//    - Accepts a validated `Prescription` object in the request body and a doctor’s token as a path variable.
-//    - Validates the token for the `"doctor"` role.
-//    - If the token is valid, updates the status of the corresponding appointment to reflect that a prescription has been added.
-//    - Delegates the saving logic to `PrescriptionService` and returns a response indicating success or failure.
+        return prescriptionService.savePrescription(aPrescription);
+   }
+ 
+   @GetMapping("/{appointmentId}")
+   public ResponseEntity<Map<String, Object>> getPrescriptiion(@PathVariable Long appointmentId, @RequestParam("Authorization") String token) {
+      ResponseEntity<Map<String, String>> testToken = service.validateToken(token, "doctor");
 
+        if(testToken.getStatusCode().value() != 200)
+            return ResponseEntity.badRequest().body(Map.of("message", "An Error ocurred when validating the token"));
 
-// 4. Define the `getPrescription` Method:
-//    - Handles HTTP GET requests to retrieve a prescription by its associated appointment ID.
-//    - Accepts the appointment ID and a doctor’s token as path variables.
-//    - Validates the token for the `"doctor"` role using the shared service.
-//    - If the token is valid, fetches the prescription using the `PrescriptionService`.
-//    - Returns the prescription details or an appropriate error message if validation fails.
-
-
+        return prescriptionService.getPrescription(appointmentId);
+   }
 }

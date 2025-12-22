@@ -65,7 +65,7 @@ public class PatientController {
         return patientService.getPatientAppointment(patientId, token);
     }
     
-    @GetMapping("/filter/{name}/{token}")
+    @GetMapping("/filter/{name}")
     public ResponseEntity<Map<String, Object>> getMethodName(@PathVariable String name, @PathVariable String condition, @RequestHeader("Authorization") String token) {
       return service.filterPatient(token, condition, name);
     }
