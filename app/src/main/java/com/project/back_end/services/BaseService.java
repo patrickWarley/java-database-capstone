@@ -27,10 +27,12 @@ public class BaseService {
   private final PatientService patientService;
   private final AppointmentRepository appointmentRepository;
 
+  private String internalErrorMessage = "An error ocurred. Please try again later!";
+  
   @Autowired
   public BaseService(TokenService tokenService, AdminRepository adminRepository, DoctorService doctorService,
       DoctorRepository doctorRepository, PatientRepository patientRepository, PatientService patientService,
-      AppointmentRepository appointmentRepository, String internalErrorMessage) {
+      AppointmentRepository appointmentRepository) {
     this.tokenService = tokenService;
     this.adminRepository = adminRepository;
     this.doctorService = doctorService;
@@ -38,10 +40,8 @@ public class BaseService {
     this.patientRepository = patientRepository;
     this.patientService = patientService;
     this.appointmentRepository = appointmentRepository;
-    this.internalErrorMessage = internalErrorMessage;
   }
 
-  private String internalErrorMessage = "An error ocurred. Please try again later!";
 
   public ResponseEntity<Map<String, String>> validateToken(String token, String user) {
     try {
