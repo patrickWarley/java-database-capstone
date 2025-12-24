@@ -1,6 +1,6 @@
- import { openModal } from "./components/modals";
- import { getDoctors, filterDoctors, saveDoctor } from "./services/doctorServices";
- import { createDoctorCard }  from "./components/doctorCard";
+ import { openModal } from "./components/modals.js";
+ import { getDoctors, filterDoctors, saveDoctor } from "./services/doctorServices.js";
+ import { createDoctorCard }  from "./components/doctorCard.js";
  
 async function loadDoctorCards(){
   /*Purpose: Fetch all doctors and display them as cards
@@ -19,7 +19,7 @@ async function loadDoctorCards(){
   
   document.getElementById("searchBar").addEventListener("input", filterDoctorsOnChange);
   document.getElementById("filterTime").addEventListener("change", filterDoctorsOnChange);
-  document.getElementById("filterSpecialty").addEventListener("change", filterDoctorsOnChange);c
+  document.getElementById("filterSpecialty").addEventListener("change", filterDoctorsOnChange);
 } 
 
 async function filterDoctorsOnChange(evt){
@@ -87,6 +87,6 @@ Purpose: Collect form data and add a new doctor to the system
 }
 
 window.addEventListener("DOMContentLoaded",() =>{
-  document.getElementById("addDocBTN").addEventListener("click", () => openModal('addDoctor'));
+  document.getElementById("addDocBtn").addEventListener("click", () => openModal('addDoctor'));
   loadDoctorCards();
 });

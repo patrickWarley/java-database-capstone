@@ -358,6 +358,10 @@
   margin-bottom: 8px;
 }
 
+.appointments-list{
+  list-style: none;
+}
+
 .availability-container {
   margin-bottom: 1rem;
   

@@ -6,6 +6,8 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,8 @@ public class TokenService {
   private final PatientRepository patientRepository;
   private final Environment env;
 
+  private final Logger logger = LoggerFactory.getLogger(TokenService.class);
+
   @Autowired
   public TokenService(DoctorRepository doctorRepository, AdminRepository adminRepository,
       PatientRepository patientRepository, Environment env) {
@@ -41,7 +45,6 @@ public class TokenService {
   }
 
   public String generateToken(String identifier, String role) {
-
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime expiration = now.plusDays(7);
 
@@ -56,20 +59,23 @@ public class TokenService {
 
   public String extractEmail(String token) {
     try {
+
       return Jwts.parser()
           .verifyWith(getSigningKey())
           .build()
           .parseSignedClaims(token)
-          .getPayload().SUBJECT;
+          .getPayload()
+          .getSubject();
 
     } catch (Exception e) {
-      System.out.println("An error ocurred when trying to parse the email! - " + e.getMessage());
+      logger.error("An error ocurred when trying to parse the email! - " + e.getMessage());
       return null;
     }
   }
 
   public boolean validateToken(String role, String token) {
     try {
+
       Claims claims = Jwts.parser()
           .verifyWith(getSigningKey())
           .build()
@@ -80,7 +86,6 @@ public class TokenService {
         return false;
 
       String identifier = extractEmail(token);
-
       Object result = null;
 
       switch (role) {
@@ -94,13 +99,12 @@ public class TokenService {
           result = doctorRepository.findByEmail(identifier);
           break;
       }
-
       if (result != null)
         return true;
 
       return false;
     } catch (Exception e) {
-      System.out.println("An error ocurred when validating the token - " + e.getMessage());
+      logger.error("An error ocurred when validating the token - " + e.getMessage());
       return false;
     }
   }

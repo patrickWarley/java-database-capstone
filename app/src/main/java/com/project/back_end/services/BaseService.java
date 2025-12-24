@@ -3,6 +3,8 @@ package com.project.back_end.services;
 import java.util.Map;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,10 @@ public class BaseService {
   private final PatientService patientService;
   private final AppointmentRepository appointmentRepository;
 
+  private final Logger logger = LoggerFactory.getLogger(BaseService.class);
+
   private String internalErrorMessage = "An error ocurred. Please try again later!";
-  
+
   @Autowired
   public BaseService(TokenService tokenService, AdminRepository adminRepository, DoctorService doctorService,
       DoctorRepository doctorRepository, PatientRepository patientRepository, PatientService patientService,
@@ -42,15 +46,15 @@ public class BaseService {
     this.appointmentRepository = appointmentRepository;
   }
 
-
   public ResponseEntity<Map<String, String>> validateToken(String token, String user) {
+
     try {
       if (tokenService.validateToken(user, token))
         return ResponseEntity.ok().body(Map.of("message", "Token is valid!"));
 
       return ResponseEntity.status(401).body(Map.of("message", "Invalid token!"));
     } catch (Exception e) {
-      System.out.println("Error when validating token! - " + e.getMessage());
+      logger.error("Error when validating token! - " + e.getMessage());
       return ResponseEntity.internalServerError().body(Map.of("message", internalErrorMessage));
     }
   }
@@ -68,7 +72,7 @@ public class BaseService {
       return ResponseEntity.status(401).body(Map.of("message", "Invalid credentials!"));
 
     } catch (Exception e) {
-      System.out.println("Error when validating admin! - " + e.getMessage());
+      logger.error("Error when validating admin! - " + e.getMessage());
       return ResponseEntity.internalServerError().body(Map.of("message", internalErrorMessage));
     }
   }
@@ -100,7 +104,7 @@ public class BaseService {
           .anyMatch(time -> time.contains("" + aAppointment.getAppointmentTime().getHour())) ? 1 : 0;
 
     } catch (Exception e) {
-      System.out.println("An error ocurred when trying to validate appointment!");
+      logger.error("An error ocurred when trying to validate appointment!");
       return -1;
     }
   }
@@ -111,7 +115,7 @@ public class BaseService {
 
       return dbPatient != null ? -1 : 1;
     } catch (Exception e) {
-      System.out.println("An error ocurred when trying to validate the patient" + e.getMessage());
+      logger.error("An error ocurred when trying to validate the patient" + e.getMessage());
       return 0;
     }
   }
@@ -121,20 +125,21 @@ public class BaseService {
       Patient dbPatient = patientRepository.findByEmail(patient.getIdentifier());
 
       if (dbPatient != null && dbPatient.getPassword().equals(patient.getPassword())) {
-        return ResponseEntity.ok().body(Map.of("token", tokenService.generateToken(patient.getIdentifier(), "patient")));
+        return ResponseEntity.ok()
+            .body(Map.of("token", tokenService.generateToken(patient.getIdentifier(), "patient")));
       }
 
       return ResponseEntity.status(401).body(Map.of("message", "Invalid credentials!"));
 
     } catch (Exception e) {
-      System.out.println("Error when validating Patient! - " + e.getMessage());
+      logger.error("Error when validating Patient! - " + e.getMessage());
       return ResponseEntity.internalServerError().body(Map.of("message", internalErrorMessage));
     }
   }
 
   public ResponseEntity<Map<String, Object>> filterPatient(String token, String condition, String doctorName) {
 
-    if (!tokenService.validateToken(token, "patient"))
+    if (!tokenService.validateToken("patient", token))
       return ResponseEntity.status(401).body(Map.of("message", "Invalid token"));
 
     Patient patient = patientRepository.findByEmail(tokenService.extractEmail(token));

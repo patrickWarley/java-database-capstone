@@ -31,12 +31,6 @@ const headersComponents = {
    
   default:{
     html:`
-           <header class="header">
-            <nav>
-             <div class="logo-section">
-               <img src="../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
-               <span class="logo-title">Hospital CMS</span>
-             </div>
         `
   }
 }
@@ -44,18 +38,7 @@ const headersComponents = {
 function renderHeader(){
 
   let headerDiv = document.getElementById("header");
-
-  if(window.location.pathname.endsWith("/")){
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("token");
-
-    headerDiv.innerHTML = headersComponents["default"].html;  
-    return;
-  }
-
-  let role = localStorage.getItem("userRole");
-  let token = localStorage.getItem("token");
-
+  
   let headerContent = `<header class="header">
          <div class="logo-section">
            <img src="../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
@@ -63,7 +46,16 @@ function renderHeader(){
          </div>
          <nav>`;
 
+  if(window.location.pathname.endsWith("/")){
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("token");
 
+    headerDiv.innerHTML = headerContent;  
+    return;
+  }
+
+  let role = localStorage.getItem("userRole");
+  let token = localStorage.getItem("token");
 
   if((role =="loggedPatient" || role=="doctor" || role=="admin") && !token){
     localStorage.removeItem('userRole');
@@ -71,8 +63,7 @@ function renderHeader(){
     window.location.href = "/"; 
     return;
   }
-
-  headerDiv.innerHTML = headersComponents[role | "default"].html +"</nav></header>";
+  headerDiv.innerHTML =headerContent + headersComponents[role || "default"].html +"</nav></header>";
 
   attachHeaderButtonListeners();
 }

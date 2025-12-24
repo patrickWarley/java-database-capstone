@@ -1,6 +1,6 @@
-import { showBookingOverlay } from "../loggedPatient";
-import { deleteDoctor } from "../services/doctorServices";
-import { getPatientData } from "../services/patientServices";
+import { showBookingOverlay } from "../loggedPatient.js";
+import { deleteDoctor } from "../services/doctorServices.js";
+import { getPatientData } from "../services/patientServices.js";
 
 
 export function createDoctorCard(doctor) {
@@ -12,10 +12,10 @@ export function createDoctorCard(doctor) {
 
   let cardContent = `
     <h3>${doctor.name}</h3>
-    <p>${doctor.specialization}</p>
+    <p>${doctor.specialty}</p>
     <p>${doctor.email}</p>
     <ul class="appointments-list">
-      ${doctor.availableTimes.reduce((curr, next) => curr += `<li>${appointment}</li>`).join(''), ""}
+      ${doctor.availableTimes.reduce((curr, next) => curr += `<li>${next}</li>`,"")}
     </ul>
   `;
 

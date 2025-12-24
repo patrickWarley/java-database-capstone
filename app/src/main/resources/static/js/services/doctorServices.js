@@ -1,5 +1,5 @@
 
-import { API_BASE_URL } from "../config/config";
+import { API_BASE_URL } from "../config/config.js";
 
 const DOCTOR_API = API_BASE_URL + "/doctor";
 const DEFAULT_ERROR_MESSAGE = "An error ocurred. Please try again later!";

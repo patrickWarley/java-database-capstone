@@ -16,29 +16,29 @@
 <body onload="renderContent()">
     <div class="container">
         <div class="wrapper">
-            <div class="header"></div>
+            <div id="header"></div>
             <main class="main-content">
                 <input type="text" id="searchBar" />
     
-                <select name="time" id="time">
+                <select name="filterTime" id="filterTime">
                     <option value="AM">AM</option>
                     <option value="PM">PM</option>
                 </select>
     
-                <select name="specialty" id="specialty">
+                <select name="filterSpecialty" id="filterSpecialty">
                     <option value="Cardiologist">Cardiologist</option>
                     <option value="Dentist">Dentist</option>
                 </select>
-                <div class="content"></div>
+                <div id="content"></div>
             </main>
-            <div class="footer"></div>
+            <div id="footer"></div>
             <div id="modal" class="modal">
                 <span id="closeModal" class="close">&times;</span>
                 <div id="modal-body"></div>
             </div>
         </div>
     </div>
-    <script type="module" src="../../static/js/adminDashboard.js" defer></script>
-    <script type="module" src="../../static/js/components/doctorCard.js" defer></script>
+    <script type="module" th:src="@{/js/adminDashboard.js}" defer></script>
+    <script type="module" th:src="@{/js/components/doctorCard.js}" defer></script>
 </body>
 </html>

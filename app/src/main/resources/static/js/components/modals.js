@@ -1,4 +1,4 @@
-// modals.js
+import { patientLoginHandler, doctorLoginHandler, adminLoginHandler } from "../services/index.js";
 export function openModal(type) {
   let modalContent = '';
   if (type === 'addDoctor') {
@@ -61,7 +61,7 @@ export function openModal(type) {
         <h2>Admin Login</h2>
         <input type="text" id="username" name="username" placeholder="Username" class="input-field">
         <input type="password" id="password" name="password" placeholder="Password" class="input-field">
-        <button class="dashboard-btn" id="adminLoginBtn" >Login</button>
+        <button class="dashboard-btn" id="adminLoginBtn" >ADMIN Login</button>
       `;
   } else if (type === 'doctorLogin') {
     modalContent = `
@@ -78,13 +78,12 @@ export function openModal(type) {
   document.getElementById('closeModal').onclick = () => {
     document.getElementById('modal').style.display = 'none';
   };
-
   if (type === "patientSignup") {
     document.getElementById("signupBtn").addEventListener("click", signupPatient);
   }
 
   if (type === "patientLogin") {
-    document.getElementById("loginBtn").addEventListener("click", loginPatient);
+    document.getElementById("loginBtn").addEventListener("click", patientLoginHandler);
   }
 
   if (type === 'addDoctor') {

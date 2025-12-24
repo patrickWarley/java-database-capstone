@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,88 +18,87 @@ import jakarta.validation.constraints.Size;
 @Entity
 public class Doctor {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
 
-    @NotNull
-    @Size(min =3, max= 100)
-    private String name;
-    
-    @NotNull
-    @Size(min = 3, max = 50)
-    private String specialty;
+  @NotNull
+  @Size(min = 3, max = 100)
+  private String name;
 
-    @NotNull
-    @Email
-    private String email;
+  @NotNull
+  @Size(min = 3, max = 50)
+  private String specialty;
 
-    @NotNull
-    @Size(min = 6)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
+  @NotNull
+  @Email
+  private String email;
 
-    @NotNull
-    @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits")
-    private String phone;
-    
-    @ElementCollection
-    private List<String> availableTimes;
+  @NotNull
+  @Size(min = 6)
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private String password;
 
-    public long getId() {
-        return id;
-    }
+  @NotNull
+  @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits")
+  private String phone;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+  @ElementCollection(fetch = FetchType.EAGER)
+  private List<String> availableTimes;
 
-    public String getName() {
-        return name;
-    }
+  public long getId() {
+    return id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setId(long id) {
+    this.id = id;
+  }
 
-    public String getSpecialty() {
-        return specialty;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setSpecialty(String specialty) {
-        this.specialty = specialty;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public String getSpecialty() {
+    return specialty;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setSpecialty(String specialty) {
+    this.specialty = specialty;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public String getPhone() {
-        return phone;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public List<String> getAvailableTimes() {
-        return availableTimes;
-    }
+  public String getPhone() {
+    return phone;
+  }
 
-    public void setAvailableTimes(List<String> availableTimes) {
-        this.availableTimes = availableTimes;
-    }
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public List<String> getAvailableTimes() {
+    return availableTimes;
+  }
+
+  public void setAvailableTimes(List<String> availableTimes) {
+    this.availableTimes = availableTimes;
+  }
 }
-

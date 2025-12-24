@@ -1,6 +1,6 @@
 
-import { getAllAppointments } from "./services/appointmentRecordService";
-import { createPatientRow } from "./components/patientRows";
+import { getAllAppointments } from "./services/appointmentRecordService.js";
+import { createPatientRow } from "./components/patientRows.js";
 
 let patientName = null;
 const selectedDate = new Date();

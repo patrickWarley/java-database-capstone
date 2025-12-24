@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.antlr.v4.runtime.misc.ObjectEqualityComparator;
-import org.apache.logging.log4j.spi.ObjectThreadContextMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,7 @@ public class DoctorService {
   private final DoctorRepository doctorRepository;
   private final AppointmentRepository appointmentRepository;
   private final TokenService tokenService;
+  private final Logger logger = LoggerFactory.getLogger(DoctorService.class);
 
   @Autowired
   public DoctorService(DoctorRepository doctorRepository, AppointmentRepository appointmentRepository,
@@ -81,7 +82,7 @@ public class DoctorService {
       doctorRepository.save(doctor);
       return 1;
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.error(e.getMessage());
       return 0;
     }
   }
@@ -98,7 +99,7 @@ public class DoctorService {
 
       return 1;
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.error(e.getMessage());
       return 0;
     }
   }
@@ -108,7 +109,7 @@ public class DoctorService {
     try {
       return doctorRepository.findAll();
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.error(e.getMessage());
       return null;
     }
   }
@@ -126,7 +127,7 @@ public class DoctorService {
       return 1;
 
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.error(e.getMessage());
       return 0;
     }
   }
@@ -146,7 +147,7 @@ public class DoctorService {
       return ResponseEntity.ok().body(Map.of("error", false, "token", token));
 
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.error(e.getMessage());
       return ResponseEntity.badRequest()
           .body(Map.of("error", true, "token", null, "message", "An internal error ocurred. Try again later!"));
     }
@@ -157,7 +158,7 @@ public class DoctorService {
     try {
       return doctorRepository.findByNameLike(name);
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.error(e.getMessage());
       return null;
     }
   }
@@ -171,7 +172,7 @@ public class DoctorService {
               .collect(Collectors.toList()));
 
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.error(e.getMessage());
       return Map.of("error", null, "message", "An error ocurred try again later!");
     }
   }
@@ -183,7 +184,7 @@ public class DoctorService {
           doctors.stream().filter(doc -> doc.getAvailableTimes().stream().anyMatch(time -> time.contains(amPm)))
               .collect(Collectors.toList()));
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.error(e.getMessage());
       return Map.of("error", null, "message", "An error ocurred try again later!");
     }
   }
@@ -200,7 +201,7 @@ public class DoctorService {
     try {
       return Map.of("Doctors", doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyIgnoreCase(name, specialty));
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.error(e.getMessage());
       return Map.of("error", null, "message", "An error ocurred try again later!");
     }
   }
@@ -212,7 +213,7 @@ public class DoctorService {
           doctors.stream().filter(doc -> doc.getAvailableTimes().stream().anyMatch(time -> time.contains(amPm)))
               .collect(Collectors.toList()));
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.error(e.getMessage());
       return Map.of("error", null, "message", "An error ocurred try again later!");
     }
   }
@@ -221,7 +222,7 @@ public class DoctorService {
     try {
       return Map.of("Doctors", doctorRepository.findBySpecialtyIgnoreCase(specialty));
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      logger.error(e.getMessage());
       return Map.of("error", null, "message", "An error ocurred try again later!");
     }
   }
