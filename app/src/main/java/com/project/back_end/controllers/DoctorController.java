@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.back_end.DTO.LoginDTO;
@@ -20,6 +21,7 @@ import com.project.back_end.services.BaseService;
 import com.project.back_end.services.DoctorService;
 
 import jakarta.transaction.Transactional;
+import jakarta.websocket.server.PathParam;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,7 +61,7 @@ public class DoctorController {
 
   @GetMapping
   public ResponseEntity<Map<String, Object>> getDoctors() {
-    List<Doctor> doctors = doctorService.geDoctors();
+    List<Doctor> doctors = doctorService.getDoctors();
 
     if (doctors == null)
       return ResponseEntity.internalServerError()
@@ -107,9 +109,12 @@ public class DoctorController {
         "Doctor not found!");
   }
 
-  @GetMapping("/filter/{name}/{time}/{speciality}")
-  public Map<String, Object> getMethodName(@PathVariable String name, @PathVariable String time,
-      @PathVariable String speciality) {
+  long test = 1;
+
+  @GetMapping("/filter")
+  public Map<String, Object> filterDoctorsByNameTimeSpeciality(@RequestParam String name, @RequestParam String time,
+      @RequestParam String speciality) {
+
     return doctorService.findDoctorsByNameSpecialtyandTime(name, time, speciality);
   }
 

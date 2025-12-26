@@ -64,4 +64,5 @@ button{
 
 .adminBtn:hover{
   background-color: #A62B1F;
+  color: white;
 }

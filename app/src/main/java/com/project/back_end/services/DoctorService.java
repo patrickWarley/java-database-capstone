@@ -105,7 +105,7 @@ public class DoctorService {
   }
 
   @Transactional
-  public List<Doctor> geDoctors() {
+  public List<Doctor> getDoctors() {
     try {
       return doctorRepository.findAll();
     } catch (Exception e) {
@@ -163,15 +163,29 @@ public class DoctorService {
     }
   }
 
-  public Map<String, Object> findDoctorsByNameSpecialtyandTime(String name, String specialty, String amPm) {
+  public Map<String, Object> findDoctorsByNameSpecialtyandTime(String name, String time, String speciality) {
     try {
-      List<Doctor> doctors = doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyIgnoreCase(name, specialty);
+
+      List<Doctor> doctors;
+
+      if (name.equals("") && speciality.equals(""))
+        doctors = getDoctors();
+      else if (!name.equals("") && !speciality.equals(""))
+        doctors = doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyIgnoreCase(name, speciality);
+      else if (!name.equals("") && speciality.equals(""))
+        doctors = doctorRepository.findByNameContainingIgnoreCase(name);
+      else
+        doctors = doctorRepository.findBySpecialtyIgnoreCase(speciality);
+
+      if (time.equals(""))
+        return Map.of("doctors", doctors);
 
       return Map.of("doctors",
-          doctors.stream().filter(doc -> doc.getAvailableTimes().stream().anyMatch(time -> time.contains(amPm)))
-              .collect(Collectors.toList()));
+          doctors.stream().filter(doc -> doc.isAvailableAt(time)).collect(Collectors.toList()));
 
-    } catch (Exception e) {
+    } catch (
+
+    Exception e) {
       logger.error(e.getMessage());
       return Map.of("error", null, "message", "An error ocurred try again later!");
     }

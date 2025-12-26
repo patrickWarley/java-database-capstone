@@ -1,6 +1,9 @@
 package com.project.back_end.models;
 
+import java.security.InvalidParameterException;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -45,6 +48,25 @@ public class Doctor {
 
   @ElementCollection(fetch = FetchType.EAGER)
   private List<String> availableTimes;
+
+  public boolean isAvailableAt(String amPm) {
+    Stream<String> stream = availableTimes.stream();
+
+    final Function<String, Integer> getStartHourAsInt = time -> {
+      return Integer.parseInt(time.split("-")[0].split(":")[0]);
+    };
+
+    if (amPm.equals("AM"))
+      return stream.anyMatch(time -> {
+        return getStartHourAsInt.apply(time) < 12;
+      });
+    else if (amPm.equals("PM"))
+      return stream.anyMatch(time -> {
+        return getStartHourAsInt.apply(time) >= 12;
+      });
+    else
+      return false;
+  }
 
   public long getId() {
     return id;

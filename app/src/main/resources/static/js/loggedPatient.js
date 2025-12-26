@@ -6,7 +6,17 @@ import { bookAppointment } from './services/appointmentRecordService.js';
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadDoctorCards();
+
+  let patientSearchBar = document.getElementById("patientSearchBar");
+  
+  if (patientSearchBar) {
+    loadDoctorCards();
+    patientSearchBar.addEventListener("input", filterDoctorsOnChange);
+    document.getElementById("patientFilterTime").addEventListener("change", filterDoctorsOnChange);
+    document.getElementById("patientFilterSpecialty").addEventListener("change", filterDoctorsOnChange);
+  }
+
+
 });
 
 function loadDoctorCards() {
@@ -86,13 +96,6 @@ export function showBookingOverlay(e, doctor, patient) {
 
 
 
-// Filter Input
-document.getElementById("searchBar").addEventListener("input", filterDoctorsOnChange);
-document.getElementById("filterTime").addEventListener("change", filterDoctorsOnChange);
-document.getElementById("filterSpecialty").addEventListener("change", filterDoctorsOnChange);
-
-
-
 function filterDoctorsOnChange() {
   const searchBar = document.getElementById("searchBar").value.trim();
   const filterTime = document.getElementById("filterTime").value;
@@ -110,7 +113,6 @@ function filterDoctorsOnChange() {
       contentDiv.innerHTML = "";
 
       if (doctors.length > 0) {
-        console.log(doctors);
         doctors.forEach(doctor => {
           const card = createDoctorCard(doctor);
           contentDiv.appendChild(card);

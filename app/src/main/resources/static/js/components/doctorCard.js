@@ -23,9 +23,11 @@ export function createDoctorCard(doctor) {
 
   let role = localStorage.getItem("role");
   let cardActionContainer = document.createElement('div');
+  cardActionContainer.classList.add("card-actions");
 
   if (role == "admin") {
     let deleteButton = document.createElement('button');
+    deleteButton.textContent = "Delete"
     deleteButton.addEventListener('click', () => {
       let token = localStorage.getItem('token');
 

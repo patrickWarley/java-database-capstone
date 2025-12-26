@@ -2,59 +2,35 @@
  import { getDoctors, filterDoctors, saveDoctor } from "./services/doctorServices.js";
  import { createDoctorCard }  from "./components/doctorCard.js";
  
+let adminDebounceTimer = {
+  id:null
+}
+
 async function loadDoctorCards(){
-  /*Purpose: Fetch all doctors and display them as cards
-    Call getDoctors() from the service layer
-    Clear the current content area
-    For each doctor returned:
-    - Create a doctor card using createDoctorCard()
-    - Append it to the content div
-
-    Handle any fetch errors by logging them
-    Attach 'input' and 'change' event listeners to the search bar and filter dropdowns
-  On any input change, call filterDoctorsOnChange()
-*/
-
+  
   renderDoctorCards(await getDoctors());
   
-  document.getElementById("searchBar").addEventListener("input", filterDoctorsOnChange);
-  document.getElementById("filterTime").addEventListener("change", filterDoctorsOnChange);
-  document.getElementById("filterSpecialty").addEventListener("change", filterDoctorsOnChange);
+  document.getElementById("adminSearchBar").addEventListener("input", filterDoctorsOnChange);
+  document.getElementById("adminFilterTime").addEventListener("change", filterDoctorsOnChange);
+  document.getElementById("adminFilterSpecialty").addEventListener("change", filterDoctorsOnChange);
 } 
 
-async function filterDoctorsOnChange(evt){
-  let name=time=specialty=null;
+async function debounce(fn, timer) {
+  if (timer.id != null) clearTimeout(timer.id);
+  timer.id = setTimeout(() => fn(), 300);
+ }
 
-  switch(evt.target.id){
-    case "searchBar'":
-     name = evt.target.value;
-     break;
-    case "filterTime":
-      time=evt.target.value;
-      break;
-    case "filterSpecialty":
-      specialty = evt.target.value;
-      break;
+async function filterDoctorsOnChange(evt) {
+   let name = document.getElementById("adminSearchBar").value;
+   let time = document.getElementById("adminFilterTime").value;
+   let speciality = document.getElementById("adminFilterSpecialty").value;
+    
+  debounce(async () => {
+    let result = await filterDoctors(name, time, speciality);
+    renderDoctorCards(result.doctors, "No doctors found with the given filters.");
+  }, adminDebounceTimer);
+
   }
-
-  let result = await filterDoctors(name, time, specialty);
-
-  renderDoctorCards(result.doctors,"No doctors found with the given filters.");
-
-  /*Purpose: Filter doctors based on name, available time, and specialty
-
-    Read values from the search bar and filters
-    Normalize empty values to null
-    Call filterDoctors(name, time, specialty) from the service
-
-    If doctors are found:
-    - Render them using createDoctorCard()
-    If no doctors match the filter:
-    - Show a message: "No doctors found with the given filters."
-
-    Catch and display any errors with an alert
-*/
-}
 
 function renderDoctorCards(doctors, emptyListMessage="There are no doctors available!"){
   let content = document.getElementById('content');
@@ -86,7 +62,7 @@ Purpose: Collect form data and add a new doctor to the system
 */
 }
 
-window.addEventListener("DOMContentLoaded",() =>{
+document.addEventListener("DOMContentLoaded",() =>{
   document.getElementById("addDocBtn").addEventListener("click", () => openModal('addDoctor'));
   loadDoctorCards();
 });
