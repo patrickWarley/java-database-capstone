@@ -12,7 +12,7 @@ async function loadDoctorCards(){
   
   document.getElementById("adminSearchBar").addEventListener("input", filterDoctorsOnChange);
   document.getElementById("adminFilterTime").addEventListener("change", filterDoctorsOnChange);
-  document.getElementById("adminFilterSpecialty").addEventListener("change", filterDoctorsOnChange);
+  document.getElementById("adminFilterspecialty").addEventListener("change", filterDoctorsOnChange);
 } 
 
 async function debounce(fn, timer) {
@@ -23,10 +23,10 @@ async function debounce(fn, timer) {
 async function filterDoctorsOnChange(evt) {
    let name = document.getElementById("adminSearchBar").value;
    let time = document.getElementById("adminFilterTime").value;
-   let speciality = document.getElementById("adminFilterSpecialty").value;
+   let specialty = document.getElementById("adminFilterspecialty").value;
     
   debounce(async () => {
-    let result = await filterDoctors(name, time, speciality);
+    let result = await filterDoctors(name, time, specialty);
     renderDoctorCards(result.doctors, "No doctors found with the given filters.");
   }, adminDebounceTimer);
 

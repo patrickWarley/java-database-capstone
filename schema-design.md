@@ -13,7 +13,7 @@
 - email: VARCHAR, UNIQUE, NOT NULL
 - contact_info: VARCHAR, NOT NULL
 - birthday: DATE, NOT NULL
-- speciality: VARCHAR, NOT NULL
+- specialty: VARCHAR, NOT NULL
 
 ### Table: appointment 
 - id: INT, Primary Key, Auto Increment

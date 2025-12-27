@@ -163,19 +163,19 @@ public class DoctorService {
     }
   }
 
-  public Map<String, Object> findDoctorsByNameSpecialtyandTime(String name, String time, String speciality) {
+  public Map<String, Object> findDoctorsByNamespecialtyandTime(String name, String time, String specialty) {
     try {
 
       List<Doctor> doctors;
 
-      if (name.equals("") && speciality.equals(""))
+      if (name.equals("") && specialty.equals(""))
         doctors = getDoctors();
-      else if (!name.equals("") && !speciality.equals(""))
-        doctors = doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyIgnoreCase(name, speciality);
-      else if (!name.equals("") && speciality.equals(""))
+      else if (!name.equals("") && !specialty.equals(""))
+        doctors = doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyIgnoreCase(name, specialty);
+      else if (!name.equals("") && specialty.equals(""))
         doctors = doctorRepository.findByNameContainingIgnoreCase(name);
       else
-        doctors = doctorRepository.findBySpecialtyIgnoreCase(speciality);
+        doctors = doctorRepository.findByspecialtyIgnoreCase(specialty);
 
       if (time.equals(""))
         return Map.of("doctors", doctors);
@@ -211,16 +211,17 @@ public class DoctorService {
             .collect(Collectors.toList()));
   }
 
-  public Map<String, Object> filterDoctorByNameAndSpeciality(String name, String specialty) {
+  public Map<String, Object> filterDoctorByNameAndspecialty(String name, String specialty) {
     try {
-      return Map.of("Doctors", doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyIgnoreCase(name, specialty));
+      return Map.of("Doctors",
+          doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyIgnoreCase(name, specialty));
     } catch (Exception e) {
       logger.error(e.getMessage());
       return Map.of("error", null, "message", "An error ocurred try again later!");
     }
   }
 
-  public Map<String, Object> filterDoctorByTimeAndSpecialty(String specialty, String amPm) {
+  public Map<String, Object> filterDoctorByTimeAndspecialty(String specialty, String amPm) {
     try {
       List<Doctor> doctors = doctorRepository.findAll();
       return Map.of("doctors",
@@ -232,9 +233,9 @@ public class DoctorService {
     }
   }
 
-  public Map<String, Object> filterDoctorBySpecialty(String specialty) {
+  public Map<String, Object> filterDoctorByspecialty(String specialty) {
     try {
-      return Map.of("Doctors", doctorRepository.findBySpecialtyIgnoreCase(specialty));
+      return Map.of("Doctors", doctorRepository.findByspecialtyIgnoreCase(specialty));
     } catch (Exception e) {
       logger.error(e.getMessage());
       return Map.of("error", null, "message", "An error ocurred try again later!");

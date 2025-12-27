@@ -83,13 +83,13 @@ public class BaseService {
 
     if (!specialty.equals("") && specialty != null) {
       if (time.equals("") && time != null)
-        return Map.of("doctors", doctorService.findDoctorsByNameSpecialtyandTime(name, specialty, time));
+        return Map.of("doctors", doctorService.findDoctorsByNamespecialtyandTime(name, specialty, time));
     } else {
       if (time.equals("") && time != null)
         return Map.of("doctors", doctorService.filterDoctorByNameAndTime(name, time));
     }
 
-    return Map.of("doctors", doctorService.geDoctors());
+    return Map.of("doctors", doctorService.getDoctors());
   }
 
   public int validateAppointment(Appointment aAppointment) {

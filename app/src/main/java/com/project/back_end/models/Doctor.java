@@ -57,13 +57,9 @@ public class Doctor {
     };
 
     if (amPm.equals("AM"))
-      return stream.anyMatch(time -> {
-        return getStartHourAsInt.apply(time) < 12;
-      });
+      return stream.anyMatch(time -> getStartHourAsInt.apply(time) < 12);
     else if (amPm.equals("PM"))
-      return stream.anyMatch(time -> {
-        return getStartHourAsInt.apply(time) >= 12;
-      });
+      return stream.anyMatch(time -> getStartHourAsInt.apply(time) >= 12);
     else
       return false;
   }
@@ -84,11 +80,11 @@ public class Doctor {
     this.name = name;
   }
 
-  public String getSpecialty() {
+  public String getspecialty() {
     return specialty;
   }
 
-  public void setSpecialty(String specialty) {
+  public void setspecialty(String specialty) {
     this.specialty = specialty;
   }
 
@@ -123,4 +119,17 @@ public class Doctor {
   public void setAvailableTimes(List<String> availableTimes) {
     this.availableTimes = availableTimes;
   }
+
+  @Override
+  public String toString() {
+    return "Doctor{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", specialty='" + specialty + '\'' +
+        ", email='" + email + '\'' +
+        ", phone='" + phone + '\'' +
+        ", availableTimes=" + availableTimes +
+        '}';
+  }
+
 }

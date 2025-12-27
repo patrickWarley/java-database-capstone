@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDoctorCards();
     patientSearchBar.addEventListener("input", filterDoctorsOnChange);
     document.getElementById("patientFilterTime").addEventListener("change", filterDoctorsOnChange);
-    document.getElementById("patientFilterSpecialty").addEventListener("change", filterDoctorsOnChange);
+    document.getElementById("patientFilterspecialty").addEventListener("change", filterDoctorsOnChange);
   }
 
 
@@ -99,12 +99,12 @@ export function showBookingOverlay(e, doctor, patient) {
 function filterDoctorsOnChange() {
   const searchBar = document.getElementById("searchBar").value.trim();
   const filterTime = document.getElementById("filterTime").value;
-  const filterSpecialty = document.getElementById("filterSpecialty").value;
+  const filterspecialty = document.getElementById("filterspecialty").value;
 
 
   const name = searchBar.length > 0 ? searchBar : null;
   const time = filterTime.length > 0 ? filterTime : null;
-  const specialty = filterSpecialty.length > 0 ? filterSpecialty : null;
+  const specialty = filterspecialty.length > 0 ? filterspecialty : null;
 
   filterDoctors(name, time, specialty)
     .then(response => {

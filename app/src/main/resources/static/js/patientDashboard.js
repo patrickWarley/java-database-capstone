@@ -45,19 +45,19 @@ function loadDoctorCards() {
 // Filter Input
 document.getElementById("searchBar").addEventListener("input", filterDoctorsOnChange);
 document.getElementById("filterTime").addEventListener("change", filterDoctorsOnChange);
-document.getElementById("filterSpecialty").addEventListener("change", filterDoctorsOnChange);
+document.getElementById("filterspecialty").addEventListener("change", filterDoctorsOnChange);
 
 
 
 function filterDoctorsOnChange() {
   const searchBar = document.getElementById("searchBar").value.trim();
   const filterTime = document.getElementById("filterTime").value;
-  const filterSpecialty = document.getElementById("filterSpecialty").value;
+  const filterspecialty = document.getElementById("filterspecialty").value;
 
 
   const name = searchBar.length > 0 ? searchBar : null;
   const time = filterTime.length > 0 ? filterTime : null;
-  const specialty = filterSpecialty.length > 0 ? filterSpecialty : null;
+  const specialty = filterspecialty.length > 0 ? filterspecialty : null;
 
   filterDoctors(name, time, specialty)
     .then(response => {

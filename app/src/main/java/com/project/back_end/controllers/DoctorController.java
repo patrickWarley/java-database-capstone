@@ -70,10 +70,13 @@ public class DoctorController {
     return ResponseEntity.ok().body(Map.of("doctors", doctors));
   }
 
-  @PostMapping("/")
+  @PostMapping
   public ResponseEntity<Map<String, String>> saveDoctor(@RequestBody Doctor doctor,
       @RequestHeader("Authorization") String token) {
-    ResponseEntity<Map<String, String>> tokenValidation = service.validateToken(token, "admin");
+
+    String tokenFormated = token.split(" ")[1];
+
+    ResponseEntity<Map<String, String>> tokenValidation = service.validateToken(tokenFormated, "admin");
     if (tokenValidation.getStatusCode() != HttpStatusCode.valueOf(200))
       return tokenValidation;
 
@@ -112,10 +115,10 @@ public class DoctorController {
   long test = 1;
 
   @GetMapping("/filter")
-  public Map<String, Object> filterDoctorsByNameTimeSpeciality(@RequestParam String name, @RequestParam String time,
-      @RequestParam String speciality) {
+  public Map<String, Object> filterDoctorsByNameTimespecialty(@RequestParam String name, @RequestParam String time,
+      @RequestParam String specialty) {
 
-    return doctorService.findDoctorsByNameSpecialtyandTime(name, time, speciality);
+    return doctorService.findDoctorsByNamespecialtyandTime(name, time, specialty);
   }
 
   private ResponseEntity<Map<String, String>> buildReponseEntity(int result, String successMessage,

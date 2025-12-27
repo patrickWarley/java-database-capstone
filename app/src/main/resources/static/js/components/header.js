@@ -3,7 +3,7 @@
 const headersComponents = {
   admin:{
     html:`
-      <button id="addDocBtn" class="adminBtn" onclick="openModal('addDoctor')">Add Doctor</button>
+      <button id="addDocBtn" class="adminBtn">Add Doctor</button>
       <a href="#" onclick="logout()">Logout</a>
     `
   },

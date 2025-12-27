@@ -38,10 +38,11 @@ export async function deleteDoctor(id, token) {
 
 export async function saveDoctor(doctor, token) {
   try {
-    let response = await fetch(DOCTOR_API+`${token}`, {
+    let response = await fetch(DOCTOR_API, {
       method:"POST",
       headers:{
-        "Content-type":"application/json",
+        "Content-type": "application/json",
+        "Authorization": `bearer ${token}`
       },
       body:JSON.stringify(doctor)
     });
@@ -54,11 +55,13 @@ export async function saveDoctor(doctor, token) {
 
   } catch (error) {
     console.log(DEFAULT_ERROR_MESSAGE, error);
+    return { success: false, DEFAULT_ERROR_MESSAGE };
   }
 }
+
 export async function filterDoctors(name, time, specialty) {
   try {
-   let response = await fetch(`${DOCTOR_API}/filter?name=${name}&time=${time}&speciality=${specialty}`);
+   let response = await fetch(`${DOCTOR_API}/filter?name=${name}&time=${time}&specialty=${specialty}`);
 
    let data = response.json();
 
