@@ -14,7 +14,7 @@ table{
 }
 
 thead{
-  background-color: #33333310;
+  background-color: #015c5d;
   color: white;
 }
 
@@ -24,11 +24,11 @@ td, th{
   border-bottom: 1px solid #ddd;
 }
 
-tr:nth-child(even){
+tbody tr:nth-child(even){
   background-color: #f9f9f959;
 }
 
-tr:nth-child(odd){
+tbody tr:nth-child(odd){
   background-color: #ffffffc0;
 }
 
@@ -41,6 +41,10 @@ tr:hover{
   height: 30px;
   cursor: pointer;
   transition: scale 0.3s ease, filter 0.3s ease;
+}
+
+#todayButton{
+  border-radius: 0!important;
 }
 
 
@@ -58,6 +62,7 @@ tr:hover{
   font-style: italic;
   font-size: 16px;
   color: gray;
+  width: 100%;
 }
 
 .today-btn{
@@ -69,6 +74,20 @@ tr:hover{
 .date-picker{
   margin-left: 10px;
   margin-top: 13px;
-  border-radius: 8px;
   padding: 10px;
+}
+
+.commands{
+  width: 100%;
+  max-width:800px;
+  display: flex;
+}
+
+.commands *{
+  margin: 0px;
+}
+
+.commands input[type="text"]{
+  flex:1;
+  height: 100%;
 }

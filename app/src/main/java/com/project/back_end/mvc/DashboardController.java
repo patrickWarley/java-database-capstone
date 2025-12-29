@@ -55,7 +55,7 @@ public class DashboardController {
   public String doctorDashboard(@PathVariable String token) {
 
     if (service.validateToken("doctor", token)) {
-      return "admin/doctorDashboard";
+      return "doctor/doctorDashboard";
     }
 
     return "redirect:/";

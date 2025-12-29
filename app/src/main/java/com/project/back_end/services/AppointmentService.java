@@ -116,10 +116,14 @@ public class AppointmentService {
     Doctor doc = doctorRepository.findByEmail(email);
     List<Appointment> result = null;
 
-    if (pName == null || pName.equals("")) {
+    if (pName == null && date == null)
+      result = appointmentRepository.findByDoctorId(doc.getId());
+    else if (pName == null || pName.equals(""))
       result = appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(doc.getId(), date.atStartOfDay(),
           date.atTime(23, 59));
-    } else {
+    else if (date == null)
+      result = appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCase(doc.getId(), pName);
+    else {
       result = appointmentRepository.findByDoctorIdAndPatient_NameContainingIgnoreCaseAndAppointmentTimeBetween(
           doc.getId(), pName, date.atStartOfDay(), date.atTime(23, 59));
     }

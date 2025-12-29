@@ -5,6 +5,5 @@ import java.util.List;
 import com.project.back_end.models.Prescription;
 
 public interface PrescriptionRepository extends MongoRepository<Prescription, String> {
-    public List<Prescription> findByAppointmentId(Long appointmentId);
+  public List<Prescription> findByAppointmentId(Long appointmentId);
 }
-

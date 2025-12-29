@@ -3,43 +3,45 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" th:href="@{/assets/images/logo/logo.png}" type="image/png" />
-    <title>Doctor Dashboard</title>
-    <link rel="stylesheet" th:href="@{/assets/css/adminDashboard.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/style.css}" />
-    <link rel="stylesheet" th:href="@{/assets/css/doctorDashboard.css}" />
-    <script th:src="@{/js/render.js}" defer></script>
-    <script th:src="@{/js/util.js}" defer></script>
-    <script th:src="@{/js/components/header.js}" defer></script>
-    <script th:src="@{/js/components/footer.js}" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" th:href="@{/assets/images/logo/logo.png}" type="image/png" />
+  <title>Doctor Dashboard</title>
+  <link rel="stylesheet" th:href="@{/assets/css/adminDashboard.css}" />
+  <link rel="stylesheet" th:href="@{/assets/css/style.css}" />
+  <link rel="stylesheet" th:href="@{/assets/css/doctorDashboard.css}" />
+  <script th:src="@{/js/render.js}" defer></script>
+  <script th:src="@{/js/util.js}" defer></script>
+  <script th:src="@{/js/components/header.js}" defer></script>
+  <script th:src="@{/js/components/footer.js}" defer></script>
 </head>
 
 <body>
-    <div class="container">
-        <div class="wrapper">
-            <div id="header"></div>
-            <main class="main-content">
-                <input type="text" id="searchBar" class="searchBar" placeholder="Search bar for custom output" />
-                <button id="todayButton"></button>
-                <input type="date" id="datePicker"></data>
-                <table id="patientTable">
-                    <thead>
-                        <th>Patient ID</th>
-                        <th>Name</th>
-                        <th>Phone No.</th>
-                        <th>Email</th>
-                        <th>Prescription</th>
-                    </thead>
-                    <tbody id="patientTableBody"></tbody>
-                </table>
-            </main>
-            <div id="footer"></div>
+  <div class="container">
+    <div class="wrapper">
+      <div id="header"></div>
+      <main class="main-content">
+        <div class="commands">
+          <button id="todayButton" class="today-btn">Today appointments</button>
+          <input type="text" id="searchBar" class="searchBar" placeholder="Patient name" />
+          <input type="date" id="datePicker" class="date-picker" />
         </div>
+        <table id="patientTable">
+          <thead>
+            <th>Patient ID</th>
+            <th>Name</th>
+            <th>Phone No.</th>
+            <th>Email</th>
+            <th>Prescription</th>
+          </thead>
+          <tbody id="patientTableBody"></tbody>
+        </table>
+      </main>
+      <div id="footer"></div>
     </div>
+  </div>
 
-    <script type="module" src="../../static/js/doctorDashboard.js" defer></script>
+  <script type="module" th:src="@{/js/doctorDashboard.js}" defer></script>
 </body>
 
 </html>

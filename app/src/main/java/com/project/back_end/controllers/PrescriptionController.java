@@ -16,43 +16,42 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-
-
 
 @Controller
 @RequestMapping("${api.path}prescription")
 public class PrescriptionController {
-    
-    private final PrescriptionService prescriptionService;
-    private final BaseService service;
-    private final AppointmentService appointmentService;
 
-    @Autowired
-    public PrescriptionController(PrescriptionService prescriptionService, BaseService service,
-            AppointmentService appointmentService) {
-        this.prescriptionService = prescriptionService;
-        this.service = service;
-        this.appointmentService = appointmentService;
-    }
+  private final PrescriptionService prescriptionService;
+  private final BaseService service;
+  private final AppointmentService appointmentService;
 
-   @PostMapping("/")
-   public ResponseEntity<Map<String, String>> savePrescription(@RequestBody Prescription aPrescription, @RequestHeader("Authorization") String token) {
-        ResponseEntity<Map<String, String>> testToken = service.validateToken(token, "doctor");
+  @Autowired
+  public PrescriptionController(PrescriptionService prescriptionService, BaseService service,
+      AppointmentService appointmentService) {
+    this.prescriptionService = prescriptionService;
+    this.service = service;
+    this.appointmentService = appointmentService;
+  }
 
-        if(testToken.getStatusCode().value() != 200)
-            return testToken;
+  @PostMapping("/")
+  public ResponseEntity<Map<String, String>> savePrescription(@RequestBody Prescription aPrescription,
+      @RequestHeader("Authorization") String token) {
+    ResponseEntity<Map<String, String>> testToken = service.validateToken(token, "doctor");
 
-        return prescriptionService.savePrescription(aPrescription);
-   }
- 
-   @GetMapping("/{appointmentId}")
-   public ResponseEntity<Map<String, Object>> getPrescriptiion(@PathVariable Long appointmentId, @RequestParam("Authorization") String token) {
-      ResponseEntity<Map<String, String>> testToken = service.validateToken(token, "doctor");
+    if (testToken.getStatusCode().value() != 200)
+      return testToken;
 
-        if(testToken.getStatusCode().value() != 200)
-            return ResponseEntity.badRequest().body(Map.of("message", "An Error ocurred when validating the token"));
+    return prescriptionService.savePrescription(aPrescription);
+  }
 
-        return prescriptionService.getPrescription(appointmentId);
-   }
+  @GetMapping("/{appointmentId}")
+  public ResponseEntity<Map<String, Object>> getPrescriptiion(@PathVariable Long appointmentId,
+      @RequestHeader("Authorization") String token) {
+    ResponseEntity<Map<String, String>> testToken = service.validateToken(token.substring(7), "doctor");
+
+    if (testToken.getStatusCode().value() != 200)
+      return ResponseEntity.badRequest().body(Map.of("message", "An Error ocurred when validating the token"));
+
+    return prescriptionService.getPrescription(appointmentId);
+  }
 }

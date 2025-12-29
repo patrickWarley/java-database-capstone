@@ -22,16 +22,20 @@ export async function getDoctors() {
 export async function deleteDoctor(id, token) {
   try {
 
-    let response = await fetch(DOCTOR_API + `/${id}/${token}`, {
+    let response = await fetch(DOCTOR_API + `/${id}`, {
       method: "DELETE",
+      headers: {
+        ...getAuthHeader()
+      }
     });
 
     let data = await response.json();
 
-    if (response.ok) return {success:true, message:"Success!! the doctor was deleted!"};
+    if (response.ok) return { success: true, message: "Success!! the doctor was deleted!" };
 
-    console.log("An error ocurred when trying to delete the doctor. Try again!");
+    return { success: false, message: data.message };
   } catch (error) {
+    return { success: false, message: DEFAULT_ERROR_MESSAGE };
     console.log(DEFAULT_ERROR_MESSAGE, error);
   }
 }
@@ -39,19 +43,19 @@ export async function deleteDoctor(id, token) {
 export async function saveDoctor(doctor, token) {
   try {
     let response = await fetch(DOCTOR_API, {
-      method:"POST",
-      headers:{
+      method: "POST",
+      headers: {
         "Content-type": "application/json",
-        "Authorization": `bearer ${token}`
+        ...getAuthHeader()
       },
-      body:JSON.stringify(doctor)
+      body: JSON.stringify(doctor)
     });
 
     let data = await response.json();
 
-    if(response.ok) return {success:true, message:"Doctor saved with success!"};
-    
-    return {success:false, message:DEFAULT_ERROR_MESSAGE} ;
+    if (response.ok) return { success: true, message: "Doctor saved with success!" };
+
+    return { success: false, message: DEFAULT_ERROR_MESSAGE };
 
   } catch (error) {
     console.log(DEFAULT_ERROR_MESSAGE, error);
@@ -61,19 +65,22 @@ export async function saveDoctor(doctor, token) {
 
 export async function filterDoctors(name, time, specialty) {
   try {
-   let response = await fetch(`${DOCTOR_API}/filter?name=${name}&time=${time}&specialty=${specialty}`);
+    let response = await fetch(`${DOCTOR_API}/filter?name=${name}&time=${time}&specialty=${specialty}`);
 
-   let data = response.json();
+    let data = response.json();
 
-   if(response.ok) return data;
+    if (response.ok) return data;
     console.log(DEFAULT_ERROR_MESSAGE);
-    return {doctors:[]};
+    return { doctors: [] };
   } catch (error) {
     console.log(DEFAULT_ERROR_MESSAGE, error);
-    return {doctors:[]};
+    return { doctors: [] };
   }
 }
 
+function getAuthHeader() {
+  return { "Authorization": `Bearer ${localStorage.getItem("token")}` };
+}
 /*
   Import the base API URL from the config file
   Define a constant DOCTOR_API to hold the full endpoint for doctor-related actions

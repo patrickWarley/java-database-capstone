@@ -134,22 +134,23 @@ public class DoctorService {
 
   public ResponseEntity<Map<String, Object>> validateDoctor(LoginDTO login) {
     try {
-      Doctor doctor = doctorRepository.findByEmail(login.getIdentifier());
-      Map<String, Object> invalid = Map.of("error", true, "token", null, "message", "Invalid credentials!");
+      Doctor doctor = doctorRepository.findByEmail(login.getEmail());
+      Map<String, Object> invalid = Map.of("message", "Invalid credentials!");
 
-      if (doctor == null)
+      if (doctor == null) {
         return ResponseEntity.badRequest().body(invalid);
+      }
 
       if (!login.getPassword().equals(doctor.getPassword()))
         return ResponseEntity.badRequest().body(invalid);
 
       String token = tokenService.generateToken(doctor.getEmail(), "doctor");
-      return ResponseEntity.ok().body(Map.of("error", false, "token", token));
+      return ResponseEntity.ok().body(Map.of("token", token));
 
     } catch (Exception e) {
       logger.error(e.getMessage());
       return ResponseEntity.badRequest()
-          .body(Map.of("error", true, "token", null, "message", "An internal error ocurred. Try again later!"));
+          .body(Map.of("message", "An internal error ocurred. Try again later!"));
     }
   }
 

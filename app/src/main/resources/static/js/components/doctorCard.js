@@ -28,16 +28,18 @@ export function createDoctorCard(doctor) {
   if (role == "admin") {
     let deleteButton = document.createElement('button');
     deleteButton.textContent = "Delete"
-    deleteButton.addEventListener('click', () => {
-      let token = localStorage.getItem('token');
+    deleteButton.addEventListener('click', async () => {
+      
+      
+      if (confirm("Are you sure you want to delete the doctor?")) {
+        let response = await deleteDoctor(doctor.id);
+        if (response.success) {
+          alert('Doctor removed successfuly');
 
-      let response = deleteDoctor(doctor.id, token);
-
-      if (response.success) {
-        alert('Doctor removed successfuly');
-        document.removeChild(doctorCardDiv);
-      } else alert("Something went wrong. Please try again later!");
-
+          doctorCardDiv.parentElement.removeChild(doctorCardDiv);
+      
+        } else alert("Something went wrong. Please try again later!");
+      }
     });
 
     cardActionContainer.appendChild(deleteButton);

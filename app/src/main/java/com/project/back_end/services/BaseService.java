@@ -122,11 +122,11 @@ public class BaseService {
 
   public ResponseEntity<Map<String, String>> validatePatientLogin(LoginDTO patient) {
     try {
-      Patient dbPatient = patientRepository.findByEmail(patient.getIdentifier());
+      Patient dbPatient = patientRepository.findByEmail(patient.getEmail());
 
       if (dbPatient != null && dbPatient.getPassword().equals(patient.getPassword())) {
         return ResponseEntity.ok()
-            .body(Map.of("token", tokenService.generateToken(patient.getIdentifier(), "patient")));
+            .body(Map.of("token", tokenService.generateToken(patient.getEmail(), "patient")));
       }
 
       return ResponseEntity.status(401).body(Map.of("message", "Invalid credentials!"));

@@ -61,8 +61,8 @@ export async function adminLoginHandler(){
 }
 
 export async function doctorLoginHandler(){
-  let email = document.getElementById('username');
-  let password = document.getElementById('password');
+  let email = document.getElementById('email').value;
+  let password = document.getElementById('password').value;
 
   let doctor = {email, password}
   try{
@@ -72,23 +72,24 @@ export async function doctorLoginHandler(){
         body:JSON.stringify(doctor)
         });
 
-      response = response.JSON();
+      let data = await response.json();
 
       //What the backend returns?
-      if(response.error) return alert("Error when trying to login. Please review your information and try again!");
+      if(!response.ok) return alert("Error when trying to login. Please review your information and try again!");
 
-      localStorage.setItem("token", response.token);
+      localStorage.setItem("token", data.token);
 
       selectRole('doctor');
 
-  }catch(error){
+  } catch (error) {
+    console.log(error);
     alert("An error ocurred! Please try again later!");
   }
 }
 
 export async function patientLoginHandler() { 
-  let email = document.getElementById('username');
-  let password = document.getElementById('password');
+  let email = document.getElementById('username').value;
+  let password = document.getElementById('password').value;
 
   let patient = { password, email }
   

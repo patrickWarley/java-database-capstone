@@ -3,8 +3,6 @@ package com.project.back_end.services;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.logging.log4j.spi.ObjectThreadContextMap;
-import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +44,7 @@ public class PrescriptionService {
 
   public ResponseEntity<Map<String, Object>> getPrescription(Long appointmentId) {
     try {
+      logger.info("" + appointmentId);
       List<Prescription> prescriptions = prescriptionRepository.findByAppointmentId(appointmentId);
 
       if (prescriptions.isEmpty())

@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,6 @@ import com.project.back_end.DTO.LoginDTO;
 import com.project.back_end.models.Doctor;
 import com.project.back_end.services.BaseService;
 import com.project.back_end.services.DoctorService;
-
-import jakarta.transaction.Transactional;
-import jakarta.websocket.server.PathParam;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,7 +46,7 @@ public class DoctorController {
   public Map<String, Object> getDoctorAvailability(@PathVariable String availability, @PathVariable String user,
       @PathVariable Long doctorId, @PathVariable Date date, @RequestHeader("Authorization") String token) {
 
-    ResponseEntity<Map<String, String>> tokenValidation = service.validateToken(token, user);
+    ResponseEntity<Map<String, String>> tokenValidation = service.validateToken(token.substring(7), user);
 
     if (tokenValidation.getStatusCode() != HttpStatusCode.valueOf(200))
       return Map.of("error", true, "message", tokenValidation.getBody().get("Message"));
@@ -74,9 +70,7 @@ public class DoctorController {
   public ResponseEntity<Map<String, String>> saveDoctor(@RequestBody Doctor doctor,
       @RequestHeader("Authorization") String token) {
 
-    String tokenFormated = token.split(" ")[1];
-
-    ResponseEntity<Map<String, String>> tokenValidation = service.validateToken(tokenFormated, "admin");
+    ResponseEntity<Map<String, String>> tokenValidation = service.validateToken(getToken(token), "admin");
     if (tokenValidation.getStatusCode() != HttpStatusCode.valueOf(200))
       return tokenValidation;
 
@@ -85,8 +79,8 @@ public class DoctorController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<Map<String, Object>> postMethodName(@RequestBody LoginDTO entity) {
-    return doctorService.validateDoctor(entity);
+  public ResponseEntity<Map<String, Object>> login(@RequestBody LoginDTO doctor) {
+    return doctorService.validateDoctor(doctor);
   }
 
   @PutMapping("/")
@@ -104,15 +98,13 @@ public class DoctorController {
   @DeleteMapping("/{doctorId}")
   public ResponseEntity<Map<String, String>> deleteDoctor(@PathVariable Long doctorId,
       @RequestHeader("Authorization") String token) {
-    ResponseEntity<Map<String, String>> tokenValidation = service.validateToken(token, "admin");
+    ResponseEntity<Map<String, String>> tokenValidation = service.validateToken(getToken(token), "admin");
     if (tokenValidation.getStatusCode() != HttpStatusCode.valueOf(200))
       return tokenValidation;
 
     return buildReponseEntity(doctorService.deleteDoctor(doctorId), "Doctor deleted successfully!",
         "Doctor not found!");
   }
-
-  long test = 1;
 
   @GetMapping("/filter")
   public Map<String, Object> filterDoctorsByNameTimespecialty(@RequestParam String name, @RequestParam String time,
@@ -133,4 +125,7 @@ public class DoctorController {
         .body(Map.of("message", INTERNAL_SERVER_ERROR_MESSAGE));
   }
 
+  private String getToken(String rawToken) {
+    return rawToken.substring(7);
+  }
 }
