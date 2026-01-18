@@ -70,7 +70,10 @@ public class AppointmentService {
 
       int validAppointment = service.validateAppointment(appointment);
 
+      // valid appointment
       if (validAppointment > 0) {
+        appointmentRepository.save(appointment);
+
         return ResponseEntity.ok(Map.of("error", "false", "message", "Appointment saved with success!"));
       }
 
@@ -117,7 +120,7 @@ public class AppointmentService {
     List<Appointment> result = null;
 
     if (pName == null && date == null)
-      result = appointmentRepository.findByDoctorId(doc.getId());
+      result = appointmentRepository.findByDoctor_Id(doc.getId());
     else if (pName == null || pName.equals(""))
       result = appointmentRepository.findByDoctorIdAndAppointmentTimeBetween(doc.getId(), date.atStartOfDay(),
           date.atTime(23, 59));

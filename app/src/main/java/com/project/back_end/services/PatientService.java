@@ -1,5 +1,6 @@
 package com.project.back_end.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,24 +45,25 @@ public class PatientService {
     }
   }
 
-  public ResponseEntity<Map<String, Object>> getPatientAppointment(long patientId, String token) {
+  public ResponseEntity<Map<String, Object>> getPatientAppointment(long patientId, String token, String role) {
     try {
 
-      if (!tokenService.validateToken("patient", token))
-        return ResponseEntity.badRequest().body(Map.of("Invalid token!", null));
+      if (!tokenService.validateToken(role, token))
+        return ResponseEntity.badRequest().body(Map.of("message", "Invalid token!"));
 
-      List<Appointment> appointments = appointmentRepository.findByPatientId(patientId);
+      List<Appointment> appointments = appointmentRepository.findByPatientIdOrderByStatus(patientId);
 
-      return ResponseEntity.ok().body(Map.of("Appointments", convertToDTO(appointments)));
+      return ResponseEntity.ok().body(Map.of("appointments", convertToDTO(appointments)));
 
     } catch (Exception e) {
       logger.error("An error occurred when trying to retrieve the patient" + e.getMessage());
       return ResponseEntity.internalServerError()
-          .body(Map.of("Error when trying to retrieve patient data!", null));
+          .body(Map.of("message", "An error occurred when trying to retrieve the patient"));
     }
   }
 
   public ResponseEntity<Map<String, Object>> filterByCondition(long patienId, String condition) {
+    logger.info(condition + " LOOOOOOOO");
     try {
       List<Appointment> appointments = appointmentRepository
           .findByPatient_IdAndStatusOrderByAppointmentTimeAsc(patienId, condition == "future" ? 0 : 1);
@@ -70,7 +72,7 @@ public class PatientService {
     } catch (Exception e) {
       logger.error("An error occurred when trying to retrieve the list of appointments" + e.getMessage());
       return ResponseEntity.internalServerError()
-          .body(Map.of("Error when trying to retrieve appointment data!", null));
+          .body(Map.of("message", "Error when trying to retrieve appointment data!"));
     }
   }
 
@@ -79,41 +81,46 @@ public class PatientService {
       List<Appointment> appointments = appointmentRepository.filterByDoctorNameAndPatientId(doctorName,
           patientId);
 
-      return ResponseEntity.ok().body(Map.of("Appointments", convertToDTO(appointments)));
+      return ResponseEntity.ok().body(Map.of("appointments", convertToDTO(appointments)));
     } catch (Exception e) {
       logger.error("An error occured when trying o retrieve the list of appointments!");
       return ResponseEntity.internalServerError()
-          .body(Map.of("An error ocurred when trying to retrieve the list of appointments!", null));
+          .body(Map.of("message", "An error ocurred when trying to retrieve the list of appointments!"));
     }
   }
 
   public ResponseEntity<Map<String, Object>> filterByDoctorAndCondition(String doctorName, String condition,
       long patienId) {
+    // condition ={"past", "future"}
     try {
-      List<Appointment> appointments = appointmentRepository.filterByDoctorNameAndPatientIdAndStatus(doctorName,
-          patienId, condition == "future" ? 0 : 1);
+      List<Appointment> appointments = condition.equals("past")
+          ? appointmentRepository.filterByDoctorNameAndPatientIdAndStatus(doctorName, patienId,
+              1)
+          : appointmentRepository.filterByDoctorNameAndPatientIdAndStatus(doctorName, patienId,
+              0);
 
-      return ResponseEntity.ok().body(Map.of("Appointments", convertToDTO(appointments)));
+      return ResponseEntity.ok().body(Map.of("appointments", convertToDTO(appointments)));
     } catch (Exception e) {
       return ResponseEntity.internalServerError()
-          .body(Map.of("An error ocurred when trying to retrieve the list of appointments!", null));
+          .body(Map.of("message", "An error ocurred when trying to retrieve the list of appointments!"));
     }
   }
 
   public ResponseEntity<Map<String, Object>> getPatientDetails(String token) {
     try {
-      if (tokenService.validateToken("patient", token))
-        return ResponseEntity.badRequest().body(Map.of("Invalid token", null));
+      logger.info(token);
+      if (!tokenService.validateToken("patient", token))
+        return ResponseEntity.badRequest().body(Map.of("message", "Invalid token"));
 
       String email = tokenService.extractEmail(token);
       Patient patient = patientRepository.findByEmail(email);
 
-      return ResponseEntity.ok().body(Map.of("Patient", patient));
+      return ResponseEntity.ok().body(Map.of("patient", patient));
     } catch (Exception e) {
       logger.error("An error ocurred when trying to retrieve patient data!" + e.getMessage());
 
       return ResponseEntity.internalServerError()
-          .body(Map.of("An error ocurred when trying to retrieve patient data", null));
+          .body(Map.of("message", "An error ocurred when trying to retrieve patient data"));
     }
   }
 

@@ -8,19 +8,23 @@ const token = localStorage.getItem("token");
 const urlParams = new URLSearchParams(window.location.search);
 const patientId = urlParams.get("id");
 const doctorId = urlParams.get("doctorId");
+const patientName = urlParams.get("patientName");
 
 document.addEventListener("DOMContentLoaded", initializePage);
 
 async function initializePage() {
+  const title = document.getElementById("patientName");
+  title.innerText = patientName;
+
   try {
     if (!token) throw new Error("No token found");
 
-    const appointmentData = await getPatientAppointments(patientId, token, "doctor") || [];
+    const role = localStorage.getItem("role");
+    const appointmentData = await getPatientAppointments(patientId, token, role) || [];
 
     // Filter by both patientId and doctorId
-    const filteredAppointments = appointmentData.filter(app =>
-      app.doctorId == doctorId);
-    console.log(filteredAppointments)
+    const filteredAppointments = appointmentData.filter(app => app.doctorId == doctorId);
+
     renderAppointments(filteredAppointments);
   } catch (error) {
     console.error("Error loading appointments:", error);

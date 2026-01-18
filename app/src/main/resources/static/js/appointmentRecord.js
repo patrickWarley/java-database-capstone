@@ -7,7 +7,7 @@ const filterSelect = document.getElementById("appointmentFilter");
 
 async function loadAppointments(filter = "upcoming") {
   const appointments = await getAppointmentRecord();
-
+  console.log(appointments, filter)
   if (!appointments || appointments.length === 0) {
     tableBody.innerHTML = `<tr><td class="noPatientRecord" colspan='5'>No appointments found.</td></tr>`;
     return;

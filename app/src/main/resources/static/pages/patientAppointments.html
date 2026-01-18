@@ -22,14 +22,14 @@
       <div id="header"></div>
       <div class="main-content">
         <h2>Patient <span>Appointment</span></h2>
-        <input type="text" id="searchBar" class="searchBar" placeholder="Search Bar for custom output" />
-                <div class="filter-wrapper">
-                    <select class="filter-select" id="appointmentFilter">
-                        <option value="allAppointments">All Appointments</option>
-                        <option value="future">Upcoming Appointments</option>
-                        <option value="past">Past Appointments</option>
-                    </select>
-                </div>
+        <input type="text" id="searchBar" class="searchBar" placeholder="Doctor name" />
+        <div class="filter-wrapper">
+          <select class="filter-select" id="appointmentFilter">
+            <option value="">All Appointments</option>
+            <option value="future">Upcoming Appointments</option>
+            <option value="past">Past Appointments</option>
+          </select>
+        </div>
         <table id="patientTable">
           <thead class="table-header">
             <tr>
@@ -49,4 +49,5 @@
     </div>
   </div>
 </body>
+
 </html>

@@ -11,7 +11,7 @@ export function createPatientRow(patient, appointmentId, doctorId) {
 
   // Attach event listeners
   tr.querySelector(".patient-id").addEventListener("click", () => {
-    window.location.href = `/pages/patientRecord.html?id=${patient.id}&doctorId=${doctorId}`;
+    window.location.href = `/pages/patientRecord.html?id=${patient.id}&doctorId=${doctorId}&patientName=${patient.name}`;
   });
 
   tr.querySelector(".prescription-btn").addEventListener("click", () => {

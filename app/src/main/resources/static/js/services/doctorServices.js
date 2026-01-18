@@ -65,7 +65,7 @@ export async function saveDoctor(doctor, token) {
 
 export async function filterDoctors(name, time, specialty) {
   try {
-    let response = await fetch(`${DOCTOR_API}/filter?name=${name}&time=${time}&specialty=${specialty}`);
+    let response = await fetch(`${DOCTOR_API}/filter?name=${name == null ? "" : name}&time=${time == null ? "" : time}&specialty=${specialty == null ? "" : specialty}`);
 
     let data = response.json();
 

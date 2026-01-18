@@ -4,10 +4,11 @@ import { API_BASE_URL } from '../config/config.js'
 const PRESCRITION_API = API_BASE_URL + "/prescription"
 export async function savePrescription(prescription, token) {
   try {
-    const response = await fetch(`${PRESCRITION_API}/${token}`, {
+    const response = await fetch(`${PRESCRITION_API}`, {
       method: "POST",
       headers: {
-        "Content-type": "application/json"
+        "Content-type": "application/json",
+        "Authorization": "Bearer " + token
       },
       body: JSON.stringify(prescription)
     });

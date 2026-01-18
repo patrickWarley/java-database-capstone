@@ -29,7 +29,6 @@ export async function patientSignup(data) {
 
 //For logging in patient
 export async function patientLogin(data) {
-  console.log("patientLogin :: ", data)
   return await fetch(`${PATIENT_API}/login`, {
     method: "POST",
     headers: {
@@ -37,16 +36,22 @@ export async function patientLogin(data) {
     },
     body: JSON.stringify(data)
   });
-
-
 }
 
 // For getting patient data (name ,id , etc ). Used in booking appointments
 export async function getPatientData(token) {
   try {
-    const response = await fetch(`${PATIENT_API}/${token}`);
+    const response = await fetch(`${PATIENT_API}`, {
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    });
+
     const data = await response.json();
+
     if (response.ok) return data.patient;
+
+    console.log(data.message);
     return null;
   } catch (error) {
     console.error("Error fetching patient details:", error);
@@ -55,11 +60,18 @@ export async function getPatientData(token) {
 }
 
 // the Backend API for fetching the patient record(visible in Doctor Dashboard) and Appointments (visible in Patient Dashboard) are same based on user(patient/doctor).
-export async function getPatientAppointments(id, token, user) {
+export async function getPatientAppointments(id, token, role) {
   try {
-    const response = await fetch(`${PATIENT_API}/${id}/${user}/${token}`);
+    const response = await fetch(`${PATIENT_API}/${id}/${role}`, {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    });
+
     const data = await response.json();
-    console.log(data.appointments)
+    console.log(data);
+
     if (response.ok) {
       return data.appointments;
     }
@@ -71,12 +83,16 @@ export async function getPatientAppointments(id, token, user) {
   }
 }
 
-export async function filterAppointments(condition, name, token) {
+export async function filterAppointments(condition, doctorName, token) {
+  condition = condition == null ? "" : condition;
+  doctorName = doctorName == null ? "" : doctorName;
+
   try {
-    const response = await fetch(`${PATIENT_API}/filter/${condition}/${name}/${token}`, {
+    const response = await fetch(`${PATIENT_API}/filter?condition=${condition}&doctorName=${doctorName}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
       },
     });
 
@@ -87,7 +103,6 @@ export async function filterAppointments(condition, name, token) {
     } else {
       console.error("Failed to fetch doctors:", response.statusText);
       return { appointments: [] };
-
     }
   } catch (error) {
     console.error("Error:", error);

@@ -1,9 +1,8 @@
 package com.project.back_end.controllers;
 
 import java.time.Instant;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -47,25 +46,23 @@ public class AppointmentController {
       @RequestParam(required = false) String date,
       @RequestHeader("Authorization") String token) {
 
-    String formatedToken = token.substring(7);
-
-    ResponseEntity<Map<String, String>> formatedTokenValidation = baseService.validateToken(token.substring(7),
+    ResponseEntity<Map<String, String>> tokenValidation = baseService.validateToken(token,
         "doctor");
 
-    if (formatedTokenValidation.getStatusCode() != HttpStatusCode.valueOf(200)) {
+    if (tokenValidation.getStatusCode() != HttpStatusCode.valueOf(200)) {
 
-      return ResponseEntity.status(formatedTokenValidation.getStatusCode())
-          .body(Map.of("message", formatedTokenValidation.getBody().get("message")));
+      return ResponseEntity.status(tokenValidation.getStatusCode())
+          .body(Map.of("message", tokenValidation.getBody().get("message")));
     }
 
     LocalDate convertedDate = date != null ? LocalDate.parse(date) : null;
 
     logger.info(patientName + " - " + convertedDate + " - " +
-        formatedToken);
+        token);
 
     List<Appointment> appointments = (List<Appointment>) appointmentService
         .getAppointments(patientName, convertedDate,
-            formatedToken)
+            token)
         .get("appointments");
 
     return ResponseEntity.ok().body(Map.of("appointments", appointments));
@@ -75,7 +72,7 @@ public class AppointmentController {
   public ResponseEntity<Map<String, String>> bookAppointment(@RequestBody Appointment appointment,
       @RequestHeader("Authorization") String token) {
 
-    ResponseEntity<Map<String, String>> tokenValidation = baseService.validateToken(token.substring(7), "patient");
+    ResponseEntity<Map<String, String>> tokenValidation = baseService.validateToken(token, "patient");
     if (tokenValidation.getStatusCode() != HttpStatusCode.valueOf(200))
       return tokenValidation;
 
@@ -93,7 +90,7 @@ public class AppointmentController {
   @PutMapping
   public ResponseEntity<Map<String, String>> updateAppointment(@RequestBody Appointment appointment,
       @RequestHeader("Authorization") String token) {
-    ResponseEntity<Map<String, String>> tokenValidation = baseService.validateToken(token.substring(7), "patient");
+    ResponseEntity<Map<String, String>> tokenValidation = baseService.validateToken(token, "patient");
 
     if (tokenValidation.getStatusCode() != HttpStatusCode.valueOf(200))
       return tokenValidation;
@@ -104,7 +101,7 @@ public class AppointmentController {
   @DeleteMapping("/{appointmentId}")
   public ResponseEntity<Map<String, String>> cancelAppointment(@PathVariable Long appointmentId,
       @RequestHeader("Authorization") String token) {
-    ResponseEntity<Map<String, String>> tokenValidation = baseService.validateToken(token.substring(7), "patient");
+    ResponseEntity<Map<String, String>> tokenValidation = baseService.validateToken(token, "patient");
 
     if (tokenValidation.getStatusCode() != HttpStatusCode.valueOf(200))
       return tokenValidation;

@@ -46,7 +46,7 @@ public class DoctorController {
   public Map<String, Object> getDoctorAvailability(@PathVariable String availability, @PathVariable String user,
       @PathVariable Long doctorId, @PathVariable Date date, @RequestHeader("Authorization") String token) {
 
-    ResponseEntity<Map<String, String>> tokenValidation = service.validateToken(token.substring(7), user);
+    ResponseEntity<Map<String, String>> tokenValidation = service.validateToken(token, user);
 
     if (tokenValidation.getStatusCode() != HttpStatusCode.valueOf(200))
       return Map.of("error", true, "message", tokenValidation.getBody().get("Message"));
@@ -70,7 +70,7 @@ public class DoctorController {
   public ResponseEntity<Map<String, String>> saveDoctor(@RequestBody Doctor doctor,
       @RequestHeader("Authorization") String token) {
 
-    ResponseEntity<Map<String, String>> tokenValidation = service.validateToken(getToken(token), "admin");
+    ResponseEntity<Map<String, String>> tokenValidation = service.validateToken(token, "admin");
     if (tokenValidation.getStatusCode() != HttpStatusCode.valueOf(200))
       return tokenValidation;
 
@@ -98,7 +98,7 @@ public class DoctorController {
   @DeleteMapping("/{doctorId}")
   public ResponseEntity<Map<String, String>> deleteDoctor(@PathVariable Long doctorId,
       @RequestHeader("Authorization") String token) {
-    ResponseEntity<Map<String, String>> tokenValidation = service.validateToken(getToken(token), "admin");
+    ResponseEntity<Map<String, String>> tokenValidation = service.validateToken(token, "admin");
     if (tokenValidation.getStatusCode() != HttpStatusCode.valueOf(200))
       return tokenValidation;
 
@@ -123,9 +123,5 @@ public class DoctorController {
 
     return ResponseEntity.internalServerError()
         .body(Map.of("message", INTERNAL_SERVER_ERROR_MESSAGE));
-  }
-
-  private String getToken(String rawToken) {
-    return rawToken.substring(7);
   }
 }

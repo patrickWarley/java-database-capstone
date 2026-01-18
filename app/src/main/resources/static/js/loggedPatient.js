@@ -8,7 +8,7 @@ import { bookAppointment } from './services/appointmentRecordService.js';
 document.addEventListener("DOMContentLoaded", () => {
 
   let patientSearchBar = document.getElementById("patientSearchBar");
-  
+
   if (patientSearchBar) {
     loadDoctorCards();
     patientSearchBar.addEventListener("input", filterDoctorsOnChange);
@@ -21,15 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function loadDoctorCards() {
   getDoctors()
-    .then(doctors => {
-      const contentDiv = document.getElementById("content");
-      contentDiv.innerHTML = "";
-
-      doctors.forEach(doctor => {
-        const card = createDoctorCard(doctor);
-        contentDiv.appendChild(card);
-      });
-    })
+    .then(doctors => renderDoctorCards(doctors))
     .catch(error => {
       console.error("Failed to load doctors:", error);
     });
@@ -97,9 +89,9 @@ export function showBookingOverlay(e, doctor, patient) {
 
 
 function filterDoctorsOnChange() {
-  const searchBar = document.getElementById("searchBar").value.trim();
-  const filterTime = document.getElementById("filterTime").value;
-  const filterspecialty = document.getElementById("filterspecialty").value;
+  const searchBar = document.getElementById("patientSearchBar").value.trim();
+  const filterTime = document.getElementById("patientFilterTime").value;
+  const filterspecialty = document.getElementById("patientFilterspecialty").value;
 
 
   const name = searchBar.length > 0 ? searchBar : null;

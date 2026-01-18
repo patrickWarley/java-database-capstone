@@ -49,7 +49,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   todayButton.addEventListener('click', () => {
     let today = new Date();
-    selectedDate = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+    selectedDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     datePicker.value = selectedDate;
     loadAppointments();
   });

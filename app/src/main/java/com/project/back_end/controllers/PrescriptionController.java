@@ -2,6 +2,8 @@ package com.project.back_end.controllers;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,6 +26,7 @@ public class PrescriptionController {
   private final PrescriptionService prescriptionService;
   private final BaseService service;
   private final AppointmentService appointmentService;
+  private final Logger logger = LoggerFactory.getLogger(PrescriptionController.class);
 
   @Autowired
   public PrescriptionController(PrescriptionService prescriptionService, BaseService service,
@@ -33,9 +36,10 @@ public class PrescriptionController {
     this.appointmentService = appointmentService;
   }
 
-  @PostMapping("/")
+  @PostMapping
   public ResponseEntity<Map<String, String>> savePrescription(@RequestBody Prescription aPrescription,
       @RequestHeader("Authorization") String token) {
+
     ResponseEntity<Map<String, String>> testToken = service.validateToken(token, "doctor");
 
     if (testToken.getStatusCode().value() != 200)
@@ -47,7 +51,7 @@ public class PrescriptionController {
   @GetMapping("/{appointmentId}")
   public ResponseEntity<Map<String, Object>> getPrescriptiion(@PathVariable Long appointmentId,
       @RequestHeader("Authorization") String token) {
-    ResponseEntity<Map<String, String>> testToken = service.validateToken(token.substring(7), "doctor");
+    ResponseEntity<Map<String, String>> testToken = service.validateToken(token, "doctor");
 
     if (testToken.getStatusCode().value() != 200)
       return ResponseEntity.badRequest().body(Map.of("message", "An Error ocurred when validating the token"));

@@ -20,9 +20,8 @@ async function initializePage() {
     patientId = Number(patient.id);
 
     const appointmentData = await getPatientAppointments(patientId, token, "patient") || [];
-    allAppointments = appointmentData.filter(app => app.patientId === patientId);
 
-    renderAppointments(allAppointments);
+    renderAppointments(appointmentData);
   } catch (error) {
     console.error("Error loading appointments:", error);
     alert("❌ Failed to load your appointments.");
@@ -43,6 +42,7 @@ function renderAppointments(appointments) {
   }
 
   appointments.forEach(appointment => {
+    appointment.appointmentTimeOnly = formatTimeHourMinutes(appointment.appointmentTimeOnly);
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${appointment.patientName || "You"}</td>
@@ -88,15 +88,14 @@ async function handleFilterChange() {
   const searchBarValue = document.getElementById("searchBar").value.trim();
   const filterValue = document.getElementById("appointmentFilter").value;
 
-  const name = searchBarValue || null;
+  const doctorName = searchBarValue || null;
   const condition = filterValue === "allAppointments" ? null : filterValue || null;
 
   try {
-    const response = await filterAppointments(condition, name, token);
+    const response = await filterAppointments(condition, doctorName, token);
     const appointments = response?.appointments || [];
-    filteredAppointments = appointments.filter(app => app.patientId === patientId);
 
-    renderAppointments(filteredAppointments);
+    renderAppointments(appointments);
   } catch (error) {
     console.error("Failed to filter appointments:", error);
     alert("❌ An error occurred while filtering appointments.");

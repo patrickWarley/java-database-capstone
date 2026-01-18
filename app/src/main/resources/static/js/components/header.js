@@ -1,44 +1,42 @@
-// role can loggedPatient, doctor, admin
-
 const headersComponents = {
-  admin:{
-    html:`
+  admin: {
+    html: `
       <button id="addDocBtn" class="adminBtn">Add Doctor</button>
       <a href="#" onclick="logout()">Logout</a>
     `
   },
-  doctor:{
-    html:`
+  doctor: {
+    html: `
        <button class="adminBtn"  onclick="selectRole('doctor')">Home</button>
        <a href="#" onclick="logout()">Logout</a>
     `
   },
 
-  loggedPatient:{
-    html:`
+  loggedPatient: {
+    html: `
         <button id="home" class="adminBtn" onclick="window.location.href='/pages/loggedPatientDashboard.html'">Home</button>
         <button id="patientAppointments" class="adminBtn" onclick="window.location.href='/pages/patientAppointments.html'">Appointments</button>
         <a href="#" onclick="logoutPatient()">Logout</a>
       `
   },
 
-  patient:{
-    html:`
+  patient: {
+    html: `
       <button id="patientLogin" class="adminBtn">Login</button>
       <button id="patientSignup" class="adminBtn">Sign Up</button>
     `
   },
-   
-  default:{
-    html:`
+
+  default: {
+    html: `
         `
   }
 }
 
-function renderHeader(){
+function renderHeader() {
 
   let headerDiv = document.getElementById("header");
-  
+
   let headerContent = `<header class="header">
          <div class="logo-section">
            <img src="../assets/images/logo/logo.png" alt="Hospital CRM Logo" class="logo-img">
@@ -46,45 +44,45 @@ function renderHeader(){
          </div>
          <nav>`;
 
-  if(window.location.pathname.endsWith("/")){
-    localStorage.removeItem("userRole");
+  if (window.location.pathname.endsWith("/")) {
+    clearRole();
     localStorage.removeItem("token");
 
-    headerDiv.innerHTML = headerContent;  
+    headerDiv.innerHTML = headerContent;
     return;
   }
 
-  let role = localStorage.getItem("userRole");
+  let role = getRole();
   let token = localStorage.getItem("token");
 
-  if((role =="loggedPatient" || role=="doctor" || role=="admin") && !token){
-    localStorage.removeItem('userRole');
+  if ((role == "loggedPatient" || role == "doctor" || role == "admin") && !token) {
+    clearRole();
     alert("Session expired or invalid login. Please log in again.");
-    window.location.href = "/"; 
+    window.location.href = "/";
     return;
   }
-  headerDiv.innerHTML =headerContent + headersComponents[role || "default"].html +"</nav></header>";
+  headerDiv.innerHTML = headerContent + headersComponents[role || "default"].html + "</nav></header>";
 
   attachHeaderButtonListeners();
 }
 
-function attachHeaderButtonListeners(){
+function attachHeaderButtonListeners() {
 }
 
-function logout(){
-  localStorage.removeItem("userRole");
+function logout() {
+  clearRole();
   localStorage.removeItem("token");
 
   window.location.href = "/";
 }
 
-function logoutPatient(){
-  let role = localStorage.getItem("userRole");
+function logoutPatient() {
+  let role = getRole();
 
-  if(userRole == "loggedPatient")localStorage.setItem("userRole", "patient");
+  if (role == "loggedPatient") setRole("patient");
   localStorage.removeItem("token");
 
-  window.location.href = "/patientDashboard.html";
+  window.location.href = "/pages/patientDashboard.html";
 }
 
 renderHeader();
@@ -212,4 +210,4 @@ renderHeader();
 
   16. **Render the Header**: Finally, the `renderHeader()` function is called to initialize the header rendering process when the page loads.
 */
-   
+

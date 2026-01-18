@@ -20,10 +20,11 @@ export async function getAllAppointments(date, patientName, token) {
 
 export async function bookAppointment(appointment, token) {
   try {
-    const response = await fetch(`${APPOINTMENT_API}/${token}`, {
+    const response = await fetch(`${APPOINTMENT_API}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
       },
       body: JSON.stringify(appointment)
     });
@@ -44,10 +45,11 @@ export async function bookAppointment(appointment, token) {
 
 export async function updateAppointment(appointment, token) {
   try {
-    const response = await fetch(`${APPOINTMENT_API}/${token}`, {
+    const response = await fetch(`${APPOINTMENT_API}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
       },
       body: JSON.stringify(appointment)
     });

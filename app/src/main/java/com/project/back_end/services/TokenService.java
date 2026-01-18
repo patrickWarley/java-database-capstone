@@ -59,7 +59,7 @@ public class TokenService {
 
   public String extractEmail(String token) {
     try {
-
+      token = parseToken(token);
       return Jwts.parser()
           .verifyWith(getSigningKey())
           .build()
@@ -75,7 +75,7 @@ public class TokenService {
 
   public boolean validateToken(String role, String token) {
     try {
-
+      token = parseToken(token);
       Claims claims = Jwts.parser()
           .verifyWith(getSigningKey())
           .build()
@@ -86,6 +86,7 @@ public class TokenService {
         return false;
 
       String identifier = extractEmail(token);
+
       Object result = null;
 
       switch (role) {
@@ -99,6 +100,7 @@ public class TokenService {
           result = doctorRepository.findByEmail(identifier);
           break;
       }
+
       if (result != null)
         return true;
 
@@ -107,6 +109,11 @@ public class TokenService {
       logger.error("An error ocurred when validating the token - " + e.getMessage());
       return false;
     }
+  }
+
+  private String parseToken(String token) {
+    String[] tokenSplit = token.split(" ");
+    return tokenSplit.length == 2 ? tokenSplit[1] : tokenSplit[0];
   }
 
 }

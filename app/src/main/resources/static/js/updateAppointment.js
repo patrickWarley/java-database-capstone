@@ -36,13 +36,17 @@ async function initializePage() {
       document.getElementById("patientName").value = patientName || "You";
       document.getElementById("doctorName").value = doctorName;
       document.getElementById("appointmentDate").value = appointmentDate;
-      document.getElementById("appointmentTime").value = appointmentTime;
 
       const timeSelect = document.getElementById("appointmentTime");
       doctor.availableTimes.forEach(time => {
         const option = document.createElement("option");
         option.value = time;
         option.textContent = time;
+
+        //is this the current selected time?
+        if (time.split("-")[0] === appointmentTime) option.selected = true;
+        //option.selected = true : option.selected = false;
+
         timeSelect.appendChild(option);
       });
 

@@ -144,16 +144,9 @@ public class BaseService {
 
     Patient patient = patientRepository.findByEmail(tokenService.extractEmail(token));
 
-    if (!doctorName.equals("") && doctorName != null) {
-      if (!condition.equals("") && condition != null)
-        return ResponseEntity.ok().body(
-            Map.of("appointments", patientService.filterByDoctorAndCondition(doctorName, condition, patient.getId())));
-      else
-        return ResponseEntity.ok()
-            .body(Map.of("appointments", patientService.filterByDoctor(doctorName, patient.getId())));
+    if (!condition.equals(""))
+      return patientService.filterByDoctorAndCondition(doctorName, condition, patient.getId());
 
-    }
-
-    return ResponseEntity.ok().body(Map.of("appointments", appointmentRepository.findByPatientId(patient.getId())));
+    return patientService.filterByDoctor(doctorName, patient.getId());
   }
 }
