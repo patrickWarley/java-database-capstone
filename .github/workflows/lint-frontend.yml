@@ -16,7 +16,9 @@ jobs:
 
       - name: Install linters
         run: |
-          npm install -g htmlhint stylelint eslint stylelint-config-standard
+          npm install -g htmlhint stylelint stylelint-config-standard
+          npm install eslint @eslint/js globals eslint-plugin-react
+
       
       - name: Lint HTML
         run: htmlhint ./app/src/main/resources/static/pages/*.html || true
