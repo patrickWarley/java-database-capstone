@@ -24,8 +24,8 @@ jobs:
       - name: Lint CSS
         run: stylelint ./app/src/main/resources/static/assets/css/*.css || true
 
-      - name: Go to app folder
-        run: cd app
-
       - name: Lint JS
-        run: eslint ./app/src/main/resources/static/js/*.js || true
+        run: |
+          cd app
+          dir 
+          eslint ./app/src/main/resources/static/js/*.js || true
