@@ -27,5 +27,4 @@ jobs:
       - name: Lint JS
         run: |
           cd app
-          dir 
-          eslint ./app/src/main/resources/static/js/*.js || true
+          eslint ./src/main/resources/static/js/*.js || true
