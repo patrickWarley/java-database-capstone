@@ -17,7 +17,9 @@ jobs:
       - name: Install linters
         run: |
           npm install -g htmlhint stylelint eslint
-
+          
+      - run: ls -R app/src/main/resources/static/assets/pages
+      
       - name: Lint HTML
         run: htmlhint "app/src/main/resources/static/assets/pages/*.html" || true
 
