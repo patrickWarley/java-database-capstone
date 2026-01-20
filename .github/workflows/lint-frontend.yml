@@ -1,5 +1,5 @@
-name:lint-frontend
-run-name: ${{github.actor}} is learning GitHub Actions
+name: lint-frontend
+run-name: ${{ github.actor }} is learning GitHub Actions
 on:
   push:
   pull_request:
